@@ -1,0 +1,30 @@
+User-Agent: *
+Disallow: 
+Disallow: /bootstrap/
+Disallow: /data1/
+Disallow: /e_images/
+Disallow: /engine1/
+Disallow: /themes/
+Disallow: /wowslider/
+Disallow: /backend-search.php/
+Disallow: /e_addcart.php/
+Disallow: /e_cartCount.php/
+Disallow: /e_end.php/
+Disallow: /e_locations.php/
+Disallow: /e_checkout.php /
+Disallow: /e_address.php/
+Disallow: /e_delivery.php/
+Disallow: /e_header.php/
+Disallow: /e_settings.php/
+Disallow: /e_sidebar.php/
+Disallow: /footer.php/
+Disallow: /get_sub_locations.php/
+Disallow: /send_sms.php/
+Disallow: /sp_contpanl.php/
+Disallow: /sp_header.php/
+Disallow: /sp_orders.php/
+Disallow: /wowslider-howto.html/
+Disallow: /wowslider-iframe.html/
+Disallow: /wowslider.html/
+
+Sitemap: http://www.nafuumall.com/sitemap.xml
