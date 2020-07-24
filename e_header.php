@@ -1,28 +1,23 @@
  <?php
 
 //Connecting with the server
-$server = mysqli_connect("localhost","nafuumall","ecommerce_2020_") or die('Failed to connect');
+$server = mysqli_connect("localhost", "nafuumall", "ecommerce_2020_") or die('Failed to connect');
 $db = mysqli_select_db($server, "nafuumall_db") or die('Failed to database connect');
 
 //starting session
 session_start();
 
 
-	$ipaddress = $_SERVER['REMOTE_ADDR'];
+    $ipaddress = $_SERVER['REMOTE_ADDR'];
 
 
-if(!isset($_SESSION['sess_array']['0']) )
-													
-{
-$_SESSION['sess_array']['0']= 'no_email';
-$_SESSION['sess_array']['1']= date('s:r'.$ipaddress);
-$_SESSION['sess_array']['2']= $ipaddress;
-
-}
-else
-{
-//There is session
-$email = $_SESSION['sess_array']['0'];
+if (!isset($_SESSION['sess_array']['0'])) {
+    $_SESSION['sess_array']['0']= 'no_email';
+    $_SESSION['sess_array']['1']= date('s:r'.$ipaddress);
+    $_SESSION['sess_array']['2']= $ipaddress;
+} else {
+    //There is session
+    $email = $_SESSION['sess_array']['0'];
 }
 ?>
   <head>
@@ -61,14 +56,12 @@ $email = $_SESSION['sess_array']['0'];
 <!--Below contains content for logged in users-->
 <?php
 
-if (  $_SESSION['sess_array']['0'] !== 'no_email') {
-	$myemail = $_SESSION['sess_array']['0'];
-//account menu
-$select =  mysqli_query($server, "SELECT * FROM `registration_details` WHERE email='$myemail'");
-		while ($colms =mysqli_fetch_array($select, MYSQLI_NUM)) {
-
-
-			echo "
+if ($_SESSION['sess_array']['0'] !== 'no_email') {
+    $myemail = $_SESSION['sess_array']['0'];
+    //account menu
+    $select =  mysqli_query($server, "SELECT * FROM `registration_details` WHERE email='$myemail'");
+    while ($colms =mysqli_fetch_array($select, MYSQLI_NUM)) {
+        echo "
 		<div class='dropdown pills'>
   		<a class='dropdown-toggle' data-toggle='dropdown' href='#' >Logged in as:<strong> $colms[1] </strong><span class='icon-user'></span></a>
         <ul class='dropdown-menu' role='menu' aria-labelledby='menu1'>
@@ -79,15 +72,10 @@ $select =  mysqli_query($server, "SELECT * FROM `registration_details` WHERE ema
           <li role='presentation'><a role='menuitem' tabindex='-1' onclick='logoutPrompt()' href='index.php?log_out'>Log out</a></li>
         </ul>
 		</div>";
-		}
-//account menu
-
-
-}
-else
-{
-
-echo "Welcome";
+    }
+    //account menu
+} else {
+    echo "Welcome";
 }
 
 ?>
@@ -97,12 +85,11 @@ echo "Welcome";
 <!--code destroying sesions-->
 <?php
 
-if(isset($_GET['log_out']))
-{
-$log_out = $_GET['log_out'];
+if (isset($_GET['log_out'])) {
+    $log_out = $_GET['log_out'];
 
-session_destroy();
-header("location:index.php");
+    session_destroy();
+    header("location:index.php");
 }
 
 ?>
@@ -186,18 +173,15 @@ $('#cartCount').load('e_cartCount.php');
 	 
 <?php
 
-if($_SESSION['sess_array']['0'] == 'no_email')
-{
-echo'
+if ($_SESSION['sess_array']['0'] == 'no_email') {
+    echo'
 	 <li class="">
 	 <a href="#login" role="button" data-toggle="modal" style="padding-right:0">
 	 <span class="btn btn-medium btn-success">Login</span></a>
 	 </li>
 	 ';
-	}
-	else
-	{
-	}
+} else {
+    }
 
 ?>	 
 
@@ -253,81 +237,70 @@ echo'
 
 			<!--PHP CODE STARTS HERE-->
 <?php
-if (isset($_POST['enter']))
-{
-//variables defined & set to empty
-$emailerr = $passworderr = "";
-$email = $password = "";
+if (isset($_POST['enter'])) {
+    //variables defined & set to empty
+    $emailerr = $passworderr = "";
+    $email = $password = "";
 
-		//validating function
-		function test_input($data) {
-		   $data = trim($data);
-		   $data = stripslashes($data);
-		   $data = htmlspecialchars($data);
-		   return $data;
-		}
-		//validating function
+    //validating function
+    function test_input($data)
+    {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
+    //validating function
 
-   		if (empty($_POST["email"])) {
-   		  $emailErr = '<div class="alert alert-block alert-danger fade in">
+    if (empty($_POST["email"])) {
+        $emailErr = '<div class="alert alert-block alert-danger fade in">
 			    		<button type="button" class="close" data-dismiss="alert">×</button>
 		    *Email is required. 	</div>';
-   		} else {
-   		  $email = test_input($_POST["email"]);
-   		  // check if e-mail address is well-formed
-   		  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-   		    $emailErr = '<div class="alert alert-block alert-danger fade in">
+    } else {
+        $email = test_input($_POST["email"]);
+        // check if e-mail address is well-formed
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $emailErr = '<div class="alert alert-block alert-danger fade in">
 			    		<button type="button" class="close" data-dismiss="alert">×</button>
-		    Invalid email format. 	</div>'; 
-   		  }
-   		}
+		    Invalid email format. 	</div>';
+        }
+    }
 
-$password=md5($_POST['password']);
+    $password=md5($_POST['password']);
 
-if ($emailerr != null) {
-		  echo'	<div class="alert alert-block alert-danger fade in">';
-	  	
-			echo'	<button type="button" class="close" data-dismiss="alert">×</button>';
-			echo"	<strong></strong>Invalid entry<br/>";
-			echo "	 Check the details you entered and try again.";
-			echo" 	</div>";
-}else{
+    if ($emailerr != null) {
+        echo'	<div class="alert alert-block alert-danger fade in">';
+        
+        echo'	<button type="button" class="close" data-dismiss="alert">×</button>';
+        echo"	<strong></strong>Invalid entry<br/>";
+        echo "	 Check the details you entered and try again.";
+        echo" 	</div>";
+    } else {
+        $res= mysqli_query($server, "SELECT * FROM registration_details WHERE email='$email' AND password='$password'");
+        //check rows returned
+        $count= mysqli_num_rows($res);
 
-$res= mysqli_query($server, "SELECT * FROM registration_details WHERE email='$email' AND password='$password'");
-//check rows returned
-$count= mysqli_num_rows($res);
-
-if($count<1)
-{
-
-
-
-
-
-echo'	<div class="alert alert-block alert-error fade in">';
-echo'	<button type="button" class="close" data-dismiss="alert">×</button>';
-echo"	<strong>Failed to log in.</strong>Wrong email or password.<br/>"; 
-echo" 	</div>";
-}
-else
-{
-//on success, redirect
-//Create a session
-//session_start ();
+        if ($count<1) {
+            echo'	<div class="alert alert-block alert-error fade in">';
+            echo'	<button type="button" class="close" data-dismiss="alert">×</button>';
+            echo"	<strong>Failed to log in.</strong>Wrong email or password.<br/>";
+            echo" 	</div>";
+        } else {
+            //on success, redirect
+            //Create a session
+            //session_start ();
 
 
 
-$_SESSION['sess_array']=array();
-$_SESSION['sess_array']['0']=$email;
-$_SESSION['sess_array']['1']=date('r');
+            $_SESSION['sess_array']=array();
+            $_SESSION['sess_array']['0']=$email;
+            $_SESSION['sess_array']['1']=date('r');
 
 
-$url = $_SERVER['REQUEST_URI'];
-	echo'<meta http-equiv="REFRESH" content="0;url='.$url.'">';
-
-}
-}
-
+            $url = $_SERVER['REQUEST_URI'];
+            echo'<meta http-equiv="REFRESH" content="0;url='.$url.'">';
+        }
+    }
 }
 ?>
 <!--PHP CODE ENDS HERE-->
@@ -376,21 +349,17 @@ $url = $_SERVER['REQUEST_URI'];
 	 
 <?php
 
-if($_SESSION['sess_array']['0'] == 'no_email')
-{
-
-	echo'<li class="">
+if ($_SESSION['sess_array']['0'] == 'no_email') {
+    echo'<li class="">
 	 <a href="#login" role="button" data-toggle="modal" style="padding-right:0">
 	 <span class="btn btn-medium btn-success">Login</span></a>
 	 </li>';
-	}
-	else
-	{
-	 echo'<li class="">
+} else {
+        echo'<li class="">
 	 <a href="header.php?log_out" onclick="logoutPrompt()" style="padding-right:0" >
 	 <span class="btn btn-medium btn-success">Log Out</span></a>
 	 </li>';
-	 }
+    }
 ?>	 
 
 
