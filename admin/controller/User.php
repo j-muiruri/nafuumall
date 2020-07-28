@@ -5,9 +5,6 @@
  * @author John Muiruri <jontedev@gmail.com>
  */
 
-// use UserModel;
-// use Database;
-
 require_once 'Db.php';
 
 require_once 'admin/Model/UserModel.php';
@@ -23,7 +20,7 @@ class User
     /***
      * Register user
      */
-    public function userReg($type)
+    public function userReg()
     {
         $data['0'] = $_POST['name'];
         $data['1'] = $_POST['email'];
@@ -42,7 +39,8 @@ class User
         $fillable = "registration_details(".$cols.")";
         $reg = implode('\', \'', $data);
 
-        $add = $model->addUser($db, $fillable, $reg);
+        //add opening and closing quotes on reg or data
+        $add = $model->addUser($db,$fillable, "'".$reg."'");
 
         if ($add === true) {
             return true;
@@ -56,7 +54,6 @@ class User
     public function userLogin($type)
     {
         $data['1'] = $_POST['email'];
-        // $data['2'] = $_POST['phone'];
         $data['2']  = password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
         $userType = $type;
 
@@ -68,14 +65,14 @@ class User
         $fillable = $cols. "FROM registration_details";
         $email = $data['2'];
 
-        $get = $model->addUser($db, $fillable, $email);
+        $getUser = $model->addUser($db, $fillable, $email);
         
-        $password = password_verify($data['2'], $get['password']);
+        $password = password_verify($data['2'], $getUser['password']);
 
-        if ($get['email'] == $email && $password === true) {
+        if ($getUser['email'] == $email && $password === true) {
             return true;
         } else {
-            return "Login failed. Error: ".$get;
+            return "Login failed. Error: ".$getUser;
         }
     }
         /***
@@ -102,10 +99,7 @@ class User
 
         echo $reg."\n";
 
-        $options = [
-            'cost' => 12,
-        ];
-
+//add opening and closing quotes on reg or data
         $add = $model->addUser($db,$fillable, "'".$reg."'");
 
         if ($add) {

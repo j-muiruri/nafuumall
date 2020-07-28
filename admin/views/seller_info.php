@@ -134,7 +134,7 @@
 											<label class="col-form-label col-md-3 col-sm-3 label-align" for="full-name">Full Name <span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input type="text" name="full-name" id="full-name" required="required" class="form-control ">
+												<input type="text" name="name" id="full-name" required="required" class="form-control ">
 											</div>
 										</div>
 
@@ -142,7 +142,7 @@
 											<label class="col-form-label col-md-3 col-sm-3 label-align" for="phone-no">Phone Number <span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input type="tel" id="phone-no" name="phone-no" required="required" class="form-control">
+												<input type="tel" id="phone" name="phone" required="required" class="form-control">
 											</div>
 										</div>
 
@@ -151,21 +151,21 @@
 											<label class="col-form-label col-md-3 col-sm-3 label-align" for="referred-by">Referred by <span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input type="text" id="referred-by" name="referred-by" required="required" class="form-control">
+												<input type="text" id="referral" name="referral" required="required" class="form-control">
 											</div>
 										</div>
 
 										<div class="item form-group">
 											<label for="shop_name" class="col-form-label col-md-3 col-sm-3 label-align">Display Name / Shop Name</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input id="shop_name" class="form-control" type="text" name="shop_name">
+												<input id="shop_name" class="form-control" type="text" name="display_name">
 											</div>
 										</div>
 
 										<div class="item form-group">
 											<label for="national_id_no" class="col-form-label col-md-3 col-sm-3 label-align">National ID number</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input id="national_id_no" class="form-control" type="text" name="national_id_no">
+												<input id="national_id_no" class="form-control" type="text" name="national_id">
 											</div>
 										</div>
 
@@ -201,7 +201,7 @@
 										<div class="item form-group">
 											<label for="e_contract" class="col-form-label col-md-3 col-sm-3 label-align">E-Contract</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input id="e_contract" class="flat" required="" value="Accepted" type="radio" name="e_contract">  I have read and accepted <a class="primary" href="#">Nafuumall Contract</a>
+												<input id="e_contract" class="flat" required="" value="Accepted" type="radio" name="contract">  I have read and accepted <a class="primary" href="#">Nafuumall Contract</a>
 											</div>
 										</div>
 
@@ -222,7 +222,7 @@
 											<label class="col-form-label col-md-3 col-sm-3 label-align">Date Of Birth <span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input id="birthday" class="date-picker form-control" placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
+												<input id="birthday" name="dob"class="date-picker form-control" placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
 												<script>
 													function timeFunctionLong(input) {
 														setTimeout(function() {
