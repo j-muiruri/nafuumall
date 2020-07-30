@@ -16,6 +16,11 @@ class Products extends Database
     public $data = array();
 
     /**
+     * ID data array
+     */
+    public $id= array();
+
+    /**
      * List All Products
      */
      public function AllProducts()
@@ -34,6 +39,7 @@ class Products extends Database
        $db = new Database;
        $model = new ProductsModel;
 
+    //    print_r($id);
        return $model->getProduct($db, $id);
        
     }

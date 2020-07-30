@@ -7,6 +7,7 @@
 
 require_once '../config/Db.php';
 require_once 'admin/Model/UserModel.php';
+require_once 'admin/Model/SellerInfoModel.php';
 
 class Sellers
 {
@@ -76,10 +77,10 @@ class Sellers
             $tablekey = "seller_id";
             $update = $model->editUser($db, $id, $fillable, $cols, $data, $tablekey);
 
-            if ($update === true) {
+            if ($update) {
                 return true;
             } else {
-                return "Unable to update Seller, Error Occurred: ".$update;
+                return "Error Occurred:, Unable to update Seller ";
             }
     }
     /**
@@ -102,7 +103,7 @@ class Sellers
         if ($update) {
             return true;
         } else {
-            return "Unable to Verify Seller, Error Occurred: ".$update;
+            return "Unable to Verify Seller, Error Occurred";
         }
     }
     /**
@@ -125,7 +126,7 @@ class Sellers
         if ($update) {
             return true;
         } else {
-            return "Unable to Disable Seller, Error Occurred: ".$update;
+            return "Unable to Disable Seller, Error Occurred";
         }
     }
     /**
@@ -157,7 +158,7 @@ class Sellers
             return false;
         } else {
             //Mysql error
-            return "Login failed. Error: ".$getUser;
+            return "Login failed. Error";
         }
     }
 
@@ -190,19 +191,19 @@ class Sellers
 
 
             $db = new Database;
-            $model = new UserModel;
+            $model = new SellerInfoModel;
 
             $cols = "registration_no,business_type,seller_vat,category_id,name,person_incharge,person_gender,
             address,postal_code,town,vat_registered";
         
             $fillable = "sellers_business_info(".$cols.")";
 
-            $add = $model->addUser($db, $fillable, $data);
+            $add = $model->addBusiness($db, $fillable, $data);
 
             if ($add) {
                 return true;
             } else {
-                return "Unable to register Seller Business Information, Error Occurred: ".$add;
+                return "Unable to register Seller Business Information, Error Occurred";
             }
     }
     /**
@@ -224,7 +225,7 @@ class Sellers
             $id = $_POST['business_id'];
 
             $db = new Database;
-            $model = new UserModel;
+            $model = new SellerInfoModel;
 
             $cols = "registration_no=:registration_no,business_type=:business_type,seller_vat=:seller_vat,
             category_id=:category_id,name=:name2,person_incharge=:person_incharge,
@@ -233,12 +234,12 @@ class Sellers
         
             $fillable = "sellers_business_info";
             $key = "business_id";
-            $update = $model->editUser($db, $id, $fillable, $data, $key);
+            $update = $model->editBusiness($db, $id, $fillable, $data, $key);
 
             if ($update) {
                 return true;
             } else {
-                return "Unable to update Seller Business Information, Error Occurred: ".$update;
+                return "Unable to update Seller Business Information, Error Occurred";
             }
     }
     /**
@@ -270,16 +271,15 @@ class Sellers
 
 
             $db = new Database;
-            $model = new UserModel;
+            $model = new SellerInfoModel;
 
             $cols = "mpesa_name,mpesa_phone,bank_acc_name,bank_acc_no,bank_name,
             bank_code,bank_branch,iban,swift,payment_mode";
         
             $fillable = "sellers_payments_info(".$cols.")";
-            $reg = implode('\', \'', $data);
 
             //add opening and closing quotes on reg or data before insert
-            $add = $model->addUser($db, $fillable, "'".$reg."'");
+            $add = $model->addPayment($db, $fillable,$data);
 
             if ($add === true) {
                 return true;
@@ -304,7 +304,7 @@ class Sellers
             $data['payment_mode'] = $_POST['payment_mode'];
 
             $db = new Database;
-            $model = new UserModel;
+            $model = new SellerInfoModel;
 
             $cols= "mpesa_name=:mpesa_name,mpesa_phone=:mpesa_phone,bank_acc_name=:bank_acc_name,bank_acc_no=:bank_acc_no,
             bank_name=:bank_name,bank_code=:bank_code,bank_branch=:bank_branch,
@@ -312,12 +312,12 @@ class Sellers
         
             $fillable = "sellers_payments_info";
             $key = "payments_id";
-            $update = $model->editUser($db, $id, $fillable, $cols, $key, $data);
+            $update = $model->editPayment($db, $id, $fillable, $cols, $data, $key);
 
             if ($update) {
                 return true;
             } else {
-                return "Unable to update Seller Payment Information, Error Occurred: ".$update;
+                return "Unable to update Seller Payment Information, Error Occurred";
             }
     }
 }

@@ -24,12 +24,12 @@ class CategoryModel
     {
         $pdo =  $db->getConn();
         
-        $sql = "SELECT `cat_id`, `cat_name` FROM `category`";
+        $sql = "SELECT * FROM `category`";
         
-        $result = $pdo->prepare($sql);
+        $result = $pdo->query($sql);
 
         if ($result->rowCount() > 0) {
-            $data = $result->fetch();
+            $data = $result->fetchAll();
             return $data;
         } else {
             return false;

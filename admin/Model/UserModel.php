@@ -114,4 +114,26 @@ class UserModel
             return false;
         }
     }
+
+    /**
+    * List All User
+    */
+    public function getUsers($db, $fillable)
+    {
+        
+        $pdo =  $db->getConn();
+
+        $sql = "SELECT * FROM $fillable";
+
+        $result = $pdo->query($sql);
+        
+        $result->execute($data);
+
+        if ($result->rowCount() > 0) {
+            $data = $result->fetchAll();
+            return $data;
+        } else {
+            return false;
+        }
+    }
 }

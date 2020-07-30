@@ -16,6 +16,10 @@ class ProductsModel
      * Products Section
      */
 
+      /**
+     * ID data array
+     */
+    public $id= array();
 
     /**
      * Get Products
@@ -27,14 +31,15 @@ class ProductsModel
         
         $sql = "SELECT * FROM `product_details`";
         
-        $result = $pdo->prepare($sql);
+        $result = $pdo->query($sql);
 
         if ($result->rowCount() > 0) {
-            $data = $result->fetch();
-            return $data;
+             $data = $result->fetchAll();
+       return $data;
         } else {
             return false;
         }
+   
     }
     /**
      * Get Product
@@ -44,10 +49,10 @@ class ProductsModel
     {
         $pdo =  $db->getConn();
         
-        $sql = "SELECT * FROM `product_details` WHERE cat_id =:cat_id";
+        $sql = "SELECT * FROM `product_details` WHERE product_id =:product_id";
         
         $result = $pdo->prepare($sql);
-        
+        // print_r($id);
         $result->execute($id);
 
         if ($result->rowCount() > 0) {

@@ -7,4 +7,8 @@ require_once $dir."admin/controller/Products.php";
 
 $product = new Products;
 
-var_dump($product->AllProducts());
+// $result = $product->AllProducts();
+$id['product_id'] = 5;
+$result = $product->singleProducts($id);
+
+var_dump($result);
