@@ -5,7 +5,7 @@
  * @author John Muiruri <jontedev@gmail.com>
  */
 
-class ProductModel
+class ProductsModel
 {
     /**
      * Instantiate database
@@ -23,17 +23,17 @@ class ProductModel
      */
     public function getProducts($db)
     {
-        $conn =  $db->getConn();
+        $pdo =  $db->getConn();
         
         $sql = "SELECT * FROM `product_details`";
         
-        $data = $conn->query($sql);
+        $result = $pdo->prepare($sql);
 
-        if ($data->num_rows >0) {
-            $result = $data->fetch_all();
-            return $result;
+        if ($result->rowCount() > 0) {
+            $data = $result->fetch();
+            return $data;
         } else {
-            return $conn->error;
+            return false;
         }
     }
     /**
@@ -42,17 +42,19 @@ class ProductModel
      */
     public function getProduct($db, $id)
     {
-        $conn =  $db->getConn();
+        $pdo =  $db->getConn();
         
-        $sql = "SELECT * FROM `product_details` WHERE cat_id = '$id'";
+        $sql = "SELECT * FROM `product_details` WHERE cat_id =:cat_id";
         
-        $data = $conn->query($sql);
+        $result = $pdo->prepare($sql);
+        
+        $result->execute($id);
 
-        if ($data->num_rows >0) {
-            $result = $data->fetch_assoc();
-            return $result;
+        if ($result->rowCount() > 0) {
+            $data = $result->fetch();
+            return $data;
         } else {
-            return $conn->error;
+            return false;
         }
     }
     /**
@@ -61,33 +63,33 @@ class ProductModel
      */
     public function addProduct($db, $data)
     {
-        $conn =  $db->getConn();
+        $pdo =  $db->getConn();
         
-        $sql = "INSERT INTO `product_details`(`name`, `cat_name`, `sub_name`, `current_price`, `initial_price`, `short_description`, `long_description`, `image_1`, `image_2`, `image_3`, `date_posted`, `time_posted`, `type`, `discount`, `availability`, `warranty`) VALUES (".$data.")";
+        $sql = "INSERT INTO `product_details`(`seller_id`,`name`, `cat_name`, `sub_name`, `current_price`, `initial_price`, `short_description`, `long_description`, `image_1`, `image_2`, `image_3`, `date_posted`, `time_posted`, `type`, `discount`, `availability`, `warranty`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         
-        $data = $conn->query($sql);
-        if ($data === true) {
+        $result =$pdo->prepare($sql)->execute($data);
+        if ($result) {
             return true;
         } else {
-            return $conn->error;
+            return false;
         }
     }
     /**
      * Update Product
      *
      */
-    public function updateProduct($db, $data)
+    public function editProduct($db, $data)
     {
-        $conn =  $db->getConn();
+        $pdo =  $db->getConn();
         
-        $sql = "UPDATE`product_details` SET cat_name= '$data'";
+        $sql = "UPDATE`product_details` SET seller_id =:seller_id,name =:name,cat_name =:cat_name,sub_name =:sub_name,current_price =:current_price,initial_price =:initial_price,short_description =:short_description,long_description =:long_description,image_1 =:image_1,image_2 =:image_2,image_3 =:image_3,date_posted =:date_posted,time_posted =:time_posted,type =:type,discount =:discount,availability =:availability,warranty =:warranty WHERE product_id=:product_id";        
         
-        $data = $conn->query($sql);
-        
-        if ($data === true) {
+        $result =$pdo->prepare($sql)->execute($data);
+
+        if ($result) {
             return true;
         } else {
-            return $conn->error;
+            return false;
         }
     }
     /**
@@ -96,15 +98,16 @@ class ProductModel
      */
     public function deleteProduct($db, $data)
     {
-        $conn =  $db->getConn();
+        $pdo =  $db->getConn();
         
-        $sql = "DELETE FROM `product_details` WHERE id ='$data'";
+        $sql = "DELETE FROM `product_details` WHERE id =:product_id";
         
-        $data = $conn->query($sql);
-        if ($data === true) {
+        $result =$pdo->prepare($sql)->execute($id);
+
+        if ($result) {
             return true;
         } else {
-            return $conn->error;
+            return false;
         }
     }
     /*************

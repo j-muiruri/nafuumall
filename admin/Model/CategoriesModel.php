@@ -50,12 +50,9 @@ class CategoryModel
         $result->execute($id);
 
         if ($result->rowCount() > 0) {
-
             $data = $result->fetch();
             return $data;
-
         } else {
-
             return false;
         }
     }
@@ -72,7 +69,6 @@ class CategoryModel
         $result =$pdo->prepare($sql)->execute($data);
         if ($result) {
             return true;
-
         } else {
             return false;
         }
@@ -91,7 +87,6 @@ class CategoryModel
 
         if ($result) {
             return true;
-
         } else {
             return false;
         }
@@ -110,7 +105,6 @@ class CategoryModel
 
         if ($result) {
             return true;
-
         } else {
             return false;
         }
@@ -157,12 +151,9 @@ class CategoryModel
         $result->execute($id);
 
         if ($result->rowCount() > 0) {
-
             $data = $result->fetch();
             return $data;
-
         } else {
-
             return false;
         }
     }
@@ -179,7 +170,6 @@ class CategoryModel
         $result =$pdo->prepare($sql)->execute($data);
         if ($result) {
             return true;
-
         } else {
             return false;
         }
@@ -198,7 +188,6 @@ class CategoryModel
 
         if ($result) {
             return true;
-
         } else {
             return false;
         }
@@ -217,7 +206,6 @@ class CategoryModel
 
         if ($result) {
             return true;
-
         } else {
             return false;
         }

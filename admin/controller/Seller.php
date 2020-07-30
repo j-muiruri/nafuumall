@@ -13,9 +13,8 @@ class Sellers
     /**
      * add Seller Info
      */
-    public function addSellers($section)
+    public function addSellers()
     {
-        if ($section === "seller_add") {
             $data['name1'] = $_POST['name1'];
             $data['email_address'] = $_POST['email_address'];
             $data['phone'] = $_POST['phone'];
@@ -46,14 +45,12 @@ class Sellers
             } else {
                 return "Unable to register Seller, Error Occurred: ".$add;
             }
-        }
     }
     /**
     * edit Seller Info
     */
-    public function editSellers($id, $section)
+    public function editSellers($id)
     {
-        if ($section === "seller_update") {
             $data['name']= $_POST['name1'];
             $data['email'] = $_POST['email_address'];
             $data['phone']= $_POST['phone'];
@@ -84,7 +81,6 @@ class Sellers
             } else {
                 return "Unable to update Seller, Error Occurred: ".$update;
             }
-        }
     }
     /**
      *Verify Seller
@@ -180,7 +176,6 @@ class Sellers
     */
     public function addBusiness()
     {
-        if ($section === "business_add") {
             $data['registration_no']= $_POST['registration_no'];
             $data['business_type']= $_POST['business_type'];
             $data['seller_vat']= $_POST['seller_vat'];
@@ -209,14 +204,12 @@ class Sellers
             } else {
                 return "Unable to register Seller Business Information, Error Occurred: ".$add;
             }
-        }
     }
     /**
     * edit BusinessInfo
     */
-    public function editBusiness($id,$section)
+    public function editBusiness($id)
     {
-        if ($section === "business_update") {
             $data['registration_no']= $_POST['registration_no'];
             $data['business_type']= $_POST['business_type'];
             $data['seller_vat']= $_POST['seller_vat'];
@@ -247,7 +240,6 @@ class Sellers
             } else {
                 return "Unable to update Seller Business Information, Error Occurred: ".$update;
             }
-        }
     }
     /**
      * End of Business Section
@@ -263,9 +255,8 @@ class Sellers
     /**
      * Add Payments Info
      */
-    public function addPayments($section)
+    public function addPayments()
     {
-        if ($section === "payment_add") {
             $data['mpesa_name'] = $_POST['mpesa_name'];
             $data['mpesa_phone'] = $_POST['mpesa_phone'];
             $data['bank_acc_name'] = $_POST['bank_acc_name'];
@@ -295,14 +286,12 @@ class Sellers
             } else {
                 return "Unable to register Seller Payment Information, Error Occurred: ".$add;
             }
-        }
     }
     /**
     * edit Payments Info
     */
-    public function editPayments($id, $section)
+    public function editPayments($id)
     {
-        if ($section === "payments_update") {
             $data['mpesa_name'] = $_POST['mpesa_name'];
             $data['mpesa_phone ']= $_POST['mpesa_phone'];
             $data['bank_acc_name']= $_POST['bank_acc_name'];
@@ -323,13 +312,12 @@ class Sellers
         
             $fillable = "sellers_payments_info";
             $key = "payments_id";
-            $update = $model->editUs;er($db, $id, $fillable, $cols, $key, $data);
+            $update = $model->editUser($db, $id, $fillable, $cols, $key, $data);
 
             if ($update) {
                 return true;
             } else {
                 return "Unable to update Seller Payment Information, Error Occurred: ".$update;
             }
-        }
     }
 }
