@@ -1,111 +1,144 @@
 <?php
+
+require_once $dir.'admin/config/Db.php';
+
+require_once $dir.'admin/Model/UserModel.php';
 /**
  * User Controller Class
  *
  * @author John Muiruri <jontedev@gmail.com>
  */
-
-require_once 'Db.php';
-
-require_once 'admin/Model/UserModel.php';
-
-class User
+class User extends Database
 {
     /**
      * User data array
      */
     public $data = array();
 
-
-    /***
+    /**
      * Register user
      */
     public function userReg()
     {
-        $data['0'] = $_POST['name'];
-        $data['1'] = $_POST['email'];
-        $data['2'] = $_POST['phone'];
+        $data['name'] = $_POST['name'];
+        $data['email'] = $_POST['email'];
+        $data['phone'] = $_POST['phone'];
         $options = [
             'cost' => 12,
         ];
-        $data['3']  = password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
-        $userType = $type;
-
+        $data['password']  = password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
+        
         $db = new Database;
         $model = new UserModel;
 
-        $cols = "name,email,phone,password";
+        $cols= "name,email,phone,password";
         
-        $fillable = "registration_details(".$cols.")";
-        $reg = implode('\', \'', $data);
+        $fillable = "client_users(".$cols.")";
 
-        //add opening and closing quotes on reg or data
-        $add = $model->addUser($db,$fillable, "'".$reg."'");
+        $add = $model->addUser($db, $fillable, $data);
 
-        if ($add === true) {
+        if ($add) {
             return true;
         } else {
             return "Unable to register User, Error Occurred: ".$add;
         }
     }
-    /***
+    /**
      * Login user
      */
-    public function userLogin($type)
+    public function userLogin()
     {
-        $data['1'] = $_POST['email'];
-        $data['2']  = password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
-        $userType = $type;
-
-        $db = new Database;
-        $model = new UserModel;
-
-        $cols = "email,password";
-        
-        $fillable = $cols. "FROM registration_details";
-        $email = $data['2'];
-
-        $getUser = $model->addUser($db, $fillable, $email);
-        
-        $password = password_verify($data['2'], $getUser['password']);
-
-        if ($getUser['email'] == $email && $password === true) {
-            return true;
-        } else {
-            return "Login failed. Error: ".$getUser;
-        }
-    }
-        /***
-     * Register user
-     */
-    public function tempReg($name,$email,$phone,$pass)
-    {
-        $data['0'] = $name;
-        $data['1'] = $email;
-        $data['2'] = $phone;
-        $options = [
-            'cost' => 12,
-        ];
-        $data['3']  = password_hash($pass, PASSWORD_BCRYPT, $options);
+        $email= $email;
         // $userType = $type;
 
         $db = new Database;
         $model = new UserModel;
 
-        $cols = "name,email,phone,password";
+        $key = "email=:email";
         
-        $fillable = "registration_details(".$cols.")";
-        $reg = implode('\', \'', $data);
+        $fillable ="client_users";
+        $data['email'] = $email;
 
-        echo $reg."\n";
+        $getUser = $model->getUser($db, $fillable, $key, $data);
+        
+        $password = password_verify($password, $getUser['password']);
 
-//add opening and closing quotes on reg or data
-        $add = $model->addUser($db,$fillable, "'".$reg."'");
+        if ($password === true && $getUser['verified'] === 1 ) {
+            // Login
+            return true;
+
+        } elseif( $getUser['verified'] === 0 ) {
+            // User not verified
+            // echo "\n\n\n\n\n\n Mmmmh...you are not verified\n\n\n\n\n\n\n\n\n";
+            return false;
+
+        } else {
+            //Mysql error
+            return "Login failed. Error: ".$getUser;
+        }
+    }
+    /***
+     * Register user
+     */
+    public function tempReg($name, $email, $phone, $pass)
+    {
+        $data['name'] = $name;
+        $data['email'] = $email;
+        $data['phone'] = $phone;
+        $options = [
+            'cost' => 12,
+        ];
+        $data['password']  = password_hash($pass, PASSWORD_BCRYPT, $options);
+        // $userType = $type;
+
+        $db = new Database;
+        $model = new UserModel;
+
+        $cols= "name,email,phone,password";
+        
+        $fillable = "client_users(".$cols.")";
+
+        $add = $model->addUser($db, $fillable, $data);
 
         if ($add) {
-            echo $add;
+            return true;
         } else {
             return "Unable to register User, Error Occurred: ".$add;
+        }
+    }
+    /**
+     * Login user
+     */
+    public function tempLogin($email, $password)
+    {
+        $email= $email;
+        // $userType = $type;
+
+        $db = new Database;
+        $model = new UserModel;
+
+        $key = "email=:email";
+        
+        $fillable ="client_users";
+        $data['email'] = $email;
+
+        $getUser = $model->getUser($db, $fillable, $key, $data);
+        
+        $password = password_verify($password, $getUser['password']);
+
+        if ($password === true && $getUser['verified'] === 1 ) {
+            // Login
+            return true;
+
+        } elseif( $getUser['verified'] === 0 ) {
+            // User not verified
+            // echo "\n\n\n\n\n\n Mmmmh...you are not verified\n\n\n\n\n\n\n\n\n";
+            return false;
+
+
+        } else {
+            //Mysql error
+            return "Login failed. Error: ".$getUser;
         }
     }
 }

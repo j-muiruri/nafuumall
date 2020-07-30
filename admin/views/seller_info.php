@@ -235,6 +235,7 @@
 										<div class="ln_solid"></div>
 										<div class="item form-group">
 											<div class="col-md-6 col-sm-6 offset-md-3">
+											<input type="hidden"name="seller_add" value = "1">
 												<button class="btn btn-primary" type="button">Reset</button>
 												<button class="btn btn-primary" type="reset">Skip</button>
 												<button type="submit" class="btn btn-success"><a href="seller_info_summary.php">Next<a></button>
@@ -265,7 +266,7 @@
 											<label class="col-form-label col-md-3 col-sm-3 label-align" for="address_1">Address 1 <span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input type="text" name="address_1" id="address_1" required="required" class="form-control ">
+												<input type="text" name="address" id="address_1" required="required" class="form-control ">
 											</div>
 										</div>
 
@@ -290,7 +291,7 @@
 											<label class="col-form-label col-md-3 col-sm-3 label-align" for="type_of_business">Type of business<span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<select id="type_of_business" name="type_of_business" required="required" class="form-control">
+												<select id="type_of_business" name="business_type" required="required" class="form-control">
 													<option value="Sole Proprietor">Sole Proprietor</option>
 													<option value="Partnershp">Partnershp</option>
 												</select>
@@ -302,7 +303,7 @@
 											<label class="col-form-label col-md-3 col-sm-3 label-align" for="person_in_charge">Person in charge<span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input type="text" id="person_in_charge" name="person_in_charge" required="required" class="form-control">
+												<input type="text" id="person_incharge" name="person_incharge" required="required" class="form-control">
 											</div>
 										</div>
 
@@ -312,7 +313,7 @@
 											<div class="col-md-6 col-sm-6 ">
 												<div id="gender" class="btn-group" data-toggle="buttons">
 													<label class="btn btn-secondary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-														<input type="radio" name="gender" value="male" class="join-btn"> &nbsp; Male &nbsp;
+														<input type="radio" name="person_gender" value="male" class="join-btn"> &nbsp; Male &nbsp;
 													</label>
 													<label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
 														<input type="radio" name="gender" value="female" class="join-btn"> Female
@@ -336,7 +337,7 @@
 										<div class="item form-group">
 											<label for="business_reg_no" class="col-form-label col-md-3 col-sm-3 label-align">Business Registration No</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input id="business_reg_no" class="form-control" type="text" name="business_reg_no">
+												<input id="business_reg_no" class="form-control" type="text" name="registration_no">
 											</div>
 										</div>
 
@@ -352,7 +353,7 @@
 											<label class="col-form-label col-md-3 col-sm-3 label-align" for="main_category">Main Category<span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<select id="main_category" name="main_category" required="required" class="form-control">
+												<select id="main_category" name="category_id" required="required" class="form-control">
 													<option value="Choose Category">Choose Category</option>
 													<option value="Category 1">Category 1</option>
 													<option value="Category 2">Category 2</option>
@@ -364,7 +365,7 @@
 										<div class="item form-group">
 											<label for="legal_name" class="col-form-label col-md-3 col-sm-3 label-align">Legal Name / Company Name</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input id="legal_name" class="form-control" type="text" name="legal_name">
+												<input id="legal_name" class="form-control" type="text" name="name2">
 											</div>
 										</div>
 
@@ -373,6 +374,7 @@
 										<div class="ln_solid"></div>
 										<div class="item form-group">
 											<div class="col-md-6 col-sm-6 offset-md-3">
+											<input type="hidden"name="business_add" value = "1">
 												<button class="btn btn-primary" type="button">Reset</button>
 												<button class="btn btn-primary" type="reset">Skip</button>
 												<button type="submit" class="btn btn-success"><a href="seller_info_summary.php">Next<a></button>
@@ -412,7 +414,7 @@
 											<label class="col-form-label col-md-3 col-sm-3 label-align" for="mpesa_no">Mpesa Phone No<span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input type="text" name="mpesa_no" id="mpesa_no" required="required" class="form-control ">
+												<input type="text" name="mpesa_phone" id="mpesa_no" required="required" class="form-control ">
 											</div>
 										</div>
 
@@ -420,7 +422,7 @@
 											<label class="col-form-label col-md-3 col-sm-3 label-align" for="account_name">	Bank Acount Name<span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input type="text" id="account_name" name="account_name" required="required" class="form-control">
+												<input type="text" id="bank_acc_name" name="bank_acc_name" required="required" class="form-control">
 											</div>
 										</div>
 
@@ -428,7 +430,7 @@
 											<label class="col-form-label col-md-3 col-sm-3 label-align" for="account_no">Bank Acount no<span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input type="text" id="account_no" name="account_no" required="required" class="form-control">
+												<input type="text" id="bank_acc_no" name="bank_acc_no" required="required" class="form-control">
 											</div>
 										</div>
 
@@ -478,7 +480,7 @@
 											<label class="col-form-label col-md-3 col-sm-3 label-align" for="type_of_business">Preferred Mode of Payment<span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<select id="type_of_business" name="type_of_business" required="required" class="form-control">
+												<select id="payment_mode" name="payment_mode" required="required" class="form-control">
 													<option value="MPESA">MPESA</option>
 													<option value="BANK TRANSFER">BANK TRANSFER</option>
 												</select>
@@ -491,6 +493,7 @@
 										<div class="ln_solid"></div>
 										<div class="item form-group">
 											<div class="col-md-6 col-sm-6 offset-md-3">
+											<input type="hidden"name="payment_add" value = "1">
 												<button class="btn btn-primary" type="button">Reset</button>
 												<button class="btn btn-primary" type="reset">Skip</button>
 												<button type="submit" class="btn btn-success"><a href="seller_info_summary.php">Next<a></button>

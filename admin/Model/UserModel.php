@@ -14,59 +14,61 @@ class UserModel
     /**
      * Instantiate database
      */
-    public $db;
+    private $db;
 
 
     /**
      * Fillable column values
      */
-    public $fillable;
+    private $fillable;
 
     /**
      * fillable data
      */
-    public $data;
+    private $data;
     
     /**
      * user id
      */
-    public $id;
+    private $id;
 
     /**
      * Add User
      */
     public function addUser($db, $fillable, $data)
     {
+        $pdo = $db->getConn();
 
-        $conn =  $db->getConn();
+        $sql = "INSERT INTO $fillable VALUES (?,?,?,?)";
 
-        $sql = "INSERT INTO $fillable 
-        values($data)";
+        $result =$pdo->prepare($sql)->execute($data);
 
-        $result = $conn->query($sql);
-
+        // return true;
         if ($result) {
-            return $conn->insert_id;
+            return true;
+
         } else {
-            return $conn->error;
+            return false;
         }
     }
     /**
      * Edit User
+     * @return true
      */
-    public function editUser($db, $id, $fillable, $data)
+    public function editUser($db, $id, $table, $cols, $data, $key)
     {
 
         $conn =  $db->getConn();
 
-        $sql = "UPDATE $fillable SET $data WHERE id = $id";
+        $sql = "UPDATE $table SET $cols WHERE $key=:$id";
 
-        $result = $conn->query($sql);
+        $result =$pdo->prepare($sql)->execute($data);
 
-        if ($result === true) {
+        if ($result) {
             return true;
+
         } else {
-            return $conn->error;
+            return false;
         }
     }
     /**
@@ -90,24 +92,26 @@ class UserModel
     /**
     * Get a User
     */
-    public function getUser($db, $fillable, $data)
+    public function getUser($db, $fillable, $key, $data)
     {
         
-        $conn =  $db->getConn();
+        $pdo =  $db->getConn();
 
-        $sql = "SELECT $fillable  WHERE $data";
+        $sql = "SELECT * FROM $fillable WHERE $key";
 
-        $result = $conn->query($sql);
+        $result = $pdo->prepare($sql);
+        
+        $result->execute($data);
+        
 
-        if ($get->num_rows > 0) {
+        if ($result->rowCount() > 0) {
 
-            $result = $data->fetch_assoc();
-
-            return $result;
+            $data = $result->fetch();
+            return $data;
 
         } else {
 
-            return $conn->error;
+            return false;
         }
     }
 }

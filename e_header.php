@@ -1,8 +1,8 @@
  <?php
 
 //Connecting with the server
-$server = mysqli_connect("localhost", "nafuumall", "ecommerce_2020_") or die('Failed to connect');
-$db = mysqli_select_db($server, "nafuumall_db") or die('Failed to database connect');
+$server = mysqli_connect("localhost", "test", "") or die('Failed to connect');
+$db = mysqli_select_db($server, "nafuumall") or die('Failed to database connect');
 
 //starting session
 session_start();
@@ -59,7 +59,7 @@ if (!isset($_SESSION['sess_array']['0'])) {
 if ($_SESSION['sess_array']['0'] !== 'no_email') {
     $myemail = $_SESSION['sess_array']['0'];
     //account menu
-    $select =  mysqli_query($server, "SELECT * FROM `registration_details` WHERE email='$myemail'");
+    $select =  mysqli_query($server, "SELECT * FROM `client_users` WHERE email='$myemail'");
     while ($colms =mysqli_fetch_array($select, MYSQLI_NUM)) {
         echo "
 		<div class='dropdown pills'>
@@ -276,7 +276,7 @@ if (isset($_POST['enter'])) {
         echo "	 Check the details you entered and try again.";
         echo" 	</div>";
     } else {
-        $res= mysqli_query($server, "SELECT * FROM registration_details WHERE email='$email' AND password='$password'");
+        $res= mysqli_query($server, "SELECT * FROM client_users WHERE email='$email' AND password='$password'");
         //check rows returned
         $count= mysqli_num_rows($res);
 

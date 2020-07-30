@@ -1,6 +1,8 @@
 <?php
-// use User;
-require_once "admin/controller/User.php";
+
+$dir = require_once"../admin/config/config.php";
+
+require_once $dir."admin/controller/User.php";
 
 $email = "test@test.com";
 $phone = "0712355355";
