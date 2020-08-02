@@ -2,15 +2,16 @@
 
 $dir = require_once"../admin/config/config.php";
 
-require_once $dir."admin/controller/User.php";
+require_once $dir."admin/controller/Admin.php";
 
-$email = "test@test.com";
-$phone = "0712355355";
-$name = "John test";
-$password = "K@Password";
+$email = "admin1@test.com";
+$phone = "0711000000";
+$name = "John DevTest";
+$password = "K@Passw0rd";
 
-
-
-$reg = new User;
+//admin
+$reg = new Admin;
+//user
+// $reg = new User;
 $reg->tempReg($name, $email, $phone, $password);
 ?>

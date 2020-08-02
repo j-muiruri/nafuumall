@@ -46,10 +46,12 @@ class Admin
             return "Unable to register User, Error Occurred: ".$add;
         }
     }
-    /***
-     * Login Admin
+
+    /**
+     * Login admin
+     * @return userid
      */
-    public function adminLogin($email, $password)
+    public function adminLogin()
     {
         $data['email'] = $_POST['email'];
         $password = $_POST['password'];
@@ -59,26 +61,36 @@ class Admin
 
         $key = "email=:email";
         
-        $fillable = "client_users";
+        $fillable = "admin_users";
 
         $getUser = $model->getUser($db, $fillable, $key, $data);
         
-        $password = password_verify($password, $getUser['password']);
-
         if ($getUser) {
+            $password = password_verify($password, $getUser['password']);
+            
             if ($password === true && $getUser['verified'] === 1) {
-                // Login
-                echo "login";
-                return true;
+
+                $result['login'] = true;
+                $result['id'] = $getUser['id'];
+
+                return $result;
             } elseif ($password === false) {
                 // User not verified
-                return "Error: Incorrect Credentials, Login failed";
+                $result['error'] = "Error: Incorrect Credentials, Login failed";
+                $result['login'] = false;
+
+                return $result;
             } elseif ($getUser['verified'] === 0) {
-                return "User-admin not Verified";
+
+                $result['login'] = false;
+                $result['error'] = "User-Admin not Verified";
+
+                return $result;
             }
         } else {
-            echo "error";
-            return false;
+            $result['login'] = false;
+            $result['error'] = "Error: User not found, Please try again or contact the Admin\n\n";
+            return $result;
         }
     }
     /**
@@ -123,6 +135,109 @@ class Admin
             return true;
         } else {
             return "Unable to Disbale Admin, Error Occurred";
+        }
+    }
+    /**
+     * List All Admin
+     */
+    public function listAdmins()
+    {
+        $db = new Database;
+        $model = new UserModel;
+
+        $fillable = "admin_users";
+
+        return $model->getUsers($db, $fillable);
+    }
+    /**
+     * Get Single Admin Details
+     */
+    public function getAdmin($id)
+    {
+        $db = new Database;
+        $model = new UserModel;
+        $data['id'] = $id;
+
+        $fillable = "admin_users";
+        $tablekey = "id=:id";
+        return $model->getUser($db, $fillable, $tablekey, $data);
+    }
+
+    /***
+     * Temporaray Register admin
+     */
+    public function tempReg($name, $email, $phone, $pass)
+    {
+        $data['name'] = $name;
+        $data['email'] = $email;
+        $data['phone'] = $phone;
+        $options = [
+            'cost' => 12,
+        ];
+        $data['password']  = password_hash($pass, PASSWORD_BCRYPT, $options);
+        // $userType = $type;
+
+        $db = new Database;
+        $model = new UserModel;
+
+        $cols= "name,email,phone,password";
+        
+        $fillable = "admin_users(".$cols.")";
+
+        $add = $model->addUser($db, $fillable, $data);
+
+        if ($add) {
+            return true;
+        } else {
+            return "Unable to register User, Error Occurred ";
+        }
+    }
+
+    /**
+    * Temp Login user
+    */
+    public function tempLogin($email, $password)
+    {
+        $email= $email;
+        // $userType = $type;
+
+        $db = new Database;
+        $model = new UserModel;
+
+        $key = "email=:email";
+        
+        $fillable ="admin_users";
+        $data['email'] = $email;
+
+        $getUser = $model->getUser($db, $fillable, $key, $data);
+        
+        
+        if ($getUser) {
+            $password = password_verify($password, $getUser['password']);
+
+            if ($password === true && $getUser['verified'] === 1) {
+
+                $result['login'] = true;
+                $result['id'] = $getUser['id'];
+
+                return $result;
+            } elseif ($password === false) {
+                // User not verified
+                $result['error'] = "Error: Incorrect Credentials, Login failed";
+                $result['login'] = false;
+
+                return $result;
+            } elseif ($getUser['verified'] === 0) {
+
+                $result['error'] = false;
+                $result['login'] = "User-Admin not Verified";
+
+                return $result;
+            }
+        } else {
+            $result['login'] = false;
+            $result['error'] = "Error: User not found, Please try again or contact the Admin\n\n";
+            return $result;
         }
     }
 }

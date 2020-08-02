@@ -3,6 +3,8 @@
 require_once $dir.'admin/config/Db.php';
 
 require_once $dir.'admin/Model/UserModel.php';
+
+require_once $dir.'admin/Model/SellerInfoModel.php';
 /**
  * User Controller Class
  *
@@ -63,20 +65,42 @@ class User extends Database
         
         $password = password_verify($password, $getUser['password']);
 
-        if ($password === true && $getUser['verified'] === 1 ) {
+        if ($password === true && $getUser['verified'] === 1) {
             // Login
-            return true;
-
-        } elseif( $getUser['verified'] === 0 ) {
+            // return true;
+            return $getUser['id'];
+        } elseif ($getUser['verified'] === 0) {
             // User not verified
             // echo "\n\n\n\n\n\n Mmmmh...you are not verified\n\n\n\n\n\n\n\n\n";
             return false;
-
         } else {
             //Mysql error
             return "Login failed. Error: ".$getUser;
         }
     }
+    /**
+    * List All Sellers - Users
+    */
+    public function listUsers()
+    {
+        $db = new Database;
+        $model = new SellerInfoModel;
+
+        return $model->getSellers($db);
+    }
+    /**
+        * Get Single Seller Details
+        */
+    public function getUser($id)
+    {
+        $db = new Database;
+        $model = new SellerInfoModel;
+        $data['id'] = $id;
+
+        return $model->getSeller($db, $data);
+    }
+
+
     /***
      * Register user
      */
@@ -103,7 +127,7 @@ class User extends Database
         if ($add) {
             return true;
         } else {
-            return "Unable to register User, Error Occurred: ".$add;
+            return "Unable to register User, Error Occurred ";
         }
     }
     /**
@@ -124,21 +148,24 @@ class User extends Database
 
         $getUser = $model->getUser($db, $fillable, $key, $data);
         
-        $password = password_verify($password, $getUser['password']);
+        
+        if ($getUser) {
+            $password = password_verify($password, $getUser['password']);
 
-        if ($password === true && $getUser['verified'] === 1 ) {
-            // Login
-            return true;
+            if ($password === true && $getUser['verified'] === 1) {
+                // Login
+                echo "login";
+                return $getUser['id'];
+            } elseif ($password === false) {
+                // User not verified
 
-        } elseif( $getUser['verified'] === 0 ) {
-            // User not verified
-            // echo "\n\n\n\n\n\n Mmmmh...you are not verified\n\n\n\n\n\n\n\n\n";
-            return false;
-
-
+                return "Error: Incorrect Credentials, Login failed";
+            } elseif ($getUser['verified'] === 0) {
+                return "User-Customer not Verified";
+            }
         } else {
-            //Mysql error
-            return "Login failed. Error: ".$getUser;
+            echo "Error: Please try again or contact the Admin\n\n";
+            return false;
         }
     }
 }

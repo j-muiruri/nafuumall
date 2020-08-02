@@ -4,6 +4,11 @@
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
-                <h2>John Doe</h2>
+                <h2><?php
+                if (isset($_SESSION['active'])) {
+                    # code...
+                    echo $userInfo['name'];
+                }
+                ?></h2>
               </div>
             </div>

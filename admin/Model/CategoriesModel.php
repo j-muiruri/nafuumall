@@ -66,7 +66,10 @@ class CategoryModel
         
         $sql = "INSERT INTO `category`(`cat_name`) VALUES (?)";
         
-        $result =$pdo->prepare($sql)->execute($data);
+        $result =$pdo->prepare($sql);
+        
+        $result->execute($data);
+
         if ($result) {
             return true;
         } else {
@@ -125,26 +128,26 @@ class CategoryModel
     {
         $pdo =  $db->getConn();
         
-        $sql = "SELECT `sub_id`, `sub_name`,`cat_id` FROM `sub_category`";
+        $sql = "SELECT * FROM `sub_category`";
         
-        $result = $pdo->prepare($sql);
+        $result = $pdo->query($sql);
 
         if ($result->rowCount() > 0) {
-            $data = $result->fetch();
-            return $data;
+             $data = $result->fetchAll();
+       return $data;
         } else {
             return false;
         }
     }
     /**
-     * Get Category
+     * Get Sub-Category
      *
      */
     public function getSub($db, $id)
     {
         $pdo =  $db->getConn();
         
-        $sql = "SELECT `sub_id`, `sub_name`,`cat_id` FROM `sub_category` WHERE sub_id =:sub_id";
+        $sql = "SELECT * FROM `sub_category` WHERE sub_id =:sub_id";
         
         $result = $pdo->prepare($sql);
         
@@ -158,7 +161,7 @@ class CategoryModel
         }
     }
     /**
-     * Add Category
+     * Add Sub-Category
      *
      */
     public function addSub($db, $data)
@@ -167,7 +170,10 @@ class CategoryModel
         
         $sql = "INSERT INTO `sub_category`(`sub_name`,`cat_id`)  VALUES (?,?)";
         
-        $result =$pdo->prepare($sql)->execute($data);
+        $result =$pdo->prepare($sql);
+        
+        $result->execute($data);
+
         if ($result) {
             return true;
         } else {
@@ -175,7 +181,7 @@ class CategoryModel
         }
     }
     /**
-     * Update Category
+     * Update Sub-Category
      *
      */
     public function updateSub($db, $data)
@@ -193,7 +199,7 @@ class CategoryModel
         }
     }
     /**
-     * Delete Category
+     * Delete Sub-Category
      *
      */
     public function deleteSub($db, $data)

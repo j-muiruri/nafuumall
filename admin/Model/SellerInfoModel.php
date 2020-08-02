@@ -35,8 +35,62 @@ class SellerInfoModel
 
 
     /***********************************
+     * Sellers Info Section
+     */
+
+
+
+ /**
+     * Get Sellers
+     *
+     */
+    public function getSellers($db)
+    {
+        $pdo =  $db->getConn();
+        
+        $sql = "SELECT * FROM `sellers_info`";
+        
+        $result = $pdo->query($sql);
+
+        if ($result->rowCount() > 0) {
+             $data = $result->fetchAll();
+       return $data;
+        } else {
+            return false;
+        }
+   
+    }
+
+    /**
+     * Get Seller
+     *
+     */
+    public function getSeller($db, $data)
+    {
+        $pdo =  $db->getConn();
+        
+        $sql = "SELECT * FROM `sellers_info` WHERE seller_id =:seller_id";
+        
+        $result = $pdo->prepare($sql);
+        // print_r($id);
+        $result->execute($data);
+
+        if ($result->rowCount() > 0) {
+            $data = $result->fetch();
+            return $data;
+        } else {
+            return false;
+        }
+    }
+
+
+
+
+    /***********************************
      * Payments Info Section
      */
+
+
 
     /**
      * Create Payment Details
@@ -47,7 +101,9 @@ class SellerInfoModel
 
         $sql = "INSERT INTO $fillable VALUES (?,?,?,?,?,?,?,?,?)";
 
-        $result =$pdo->prepare($sql)->execute($data);
+        $result =$pdo->prepare($sql);
+        
+        $result->execute($data);
 
         // return true;
         if ($result) {
@@ -88,7 +144,9 @@ class SellerInfoModel
 
         $sql = "INSERT INTO $fillable VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 
-        $result =$pdo->prepare($sql)->execute($data);
+        $result =$pdo->prepare($sql);
+        
+        $result->execute($data);
 
         // return true;
         if ($result) {

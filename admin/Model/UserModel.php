@@ -32,6 +32,7 @@ class UserModel
      */
     private $id;
 
+
     /**
      * Add User
      */
@@ -39,25 +40,32 @@ class UserModel
     {
         $pdo = $db->getConn();
 
-        $sql = "INSERT INTO $fillable VALUES (?,?,?,?)";
+        $sql = "INSERT INTO $fillable VALUES (:name, :email, :phone, :password)";
 
-        $result =$pdo->prepare($sql)->execute($data);
+        $result =$pdo->prepare($sql);
+
+        print_r($data);
+        $result->execute($data);
 
         // return true;
         if ($result) {
+            echo "added";
+            echo $pdo->lastInsertId();
             return true;
-
         } else {
+
+            echo "not added";
             return false;
         }
     }
+
+
     /**
      * Edit User
      * @return true
      */
     public function editUser($db, $id, $table, $cols, $data, $key)
     {
-
         $conn =  $db->getConn();
 
         $sql = "UPDATE $table SET $cols WHERE $key=:$id";
@@ -66,17 +74,17 @@ class UserModel
 
         if ($result) {
             return true;
-
         } else {
             return false;
         }
     }
+
+
     /**
     * Delete User
     */
     public function deleteUser($db, $fillable, $id)
     {
-
         $conn =  $db->getConn();
 
         $sql = "DELETE FROM $fillable WHERE id = $id";
@@ -89,12 +97,13 @@ class UserModel
             return $conn->error;
         }
     }
+
+
     /**
     * Get a User
     */
     public function getUser($db, $fillable, $key, $data)
     {
-        
         $pdo =  $db->getConn();
 
         $sql = "SELECT * FROM $fillable WHERE $key";
@@ -105,29 +114,23 @@ class UserModel
         
 
         if ($result->rowCount() > 0) {
-
             $data = $result->fetch();
             return $data;
-
         } else {
-
             return false;
         }
     }
 
     /**
-    * List All User
+    * List All Users
     */
     public function getUsers($db, $fillable)
     {
-        
         $pdo =  $db->getConn();
 
         $sql = "SELECT * FROM $fillable";
 
         $result = $pdo->query($sql);
-        
-        $result->execute($data);
 
         if ($result->rowCount() > 0) {
             $data = $result->fetchAll();

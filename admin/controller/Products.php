@@ -15,10 +15,10 @@ class Products extends Database
      */
     public $data = array();
 
-    /**
-     * ID data array
-     */
-    public $id= array();
+    // /**
+    //  * ID data array
+    //  */
+    // public $id= array();
 
     /**
      * List All Products
@@ -38,9 +38,9 @@ class Products extends Database
     {
        $db = new Database;
        $model = new ProductsModel;
-
+       $data['product_id'] = $id;
     //    print_r($id);
-       return $model->getProduct($db, $id);
+       return $model->getProduct($db, $data);
        
     }
 
@@ -49,7 +49,6 @@ class Products extends Database
      */
     public function createProduct()
     {
-        $data['seller_id'] = $_POST['seller_id'];
         $data['name'] = $_POST['name'];
         $data['cat_name'] = $_POST['cat_name'];
         $data['sub_name'] = $_POST['sub_name'];
@@ -74,9 +73,13 @@ class Products extends Database
         $add = $model->addProduct($db,$data);
 
             if ($add) {
-                return true;
+
+                $result['add_product'] = true;
+                
+                return $result;
             } else {
-                return "Error: Unable to add New Product";
+                $result['add_product'] = false;
+                $result['error'] = "Error: Unable to add New Product";
             }
        
     }
@@ -110,10 +113,14 @@ class Products extends Database
 
         $edit = $model->editProduct($db,$data);
 
-            if ($add) {
-                return true;
+            if ($edit) {
+
+                $result['edit_product'] = true;
+                
+                return $result;
             } else {
-                return "Error: Unable to Update Product Details";
+                $result['edit_product'] = false;
+                $result['error'] = "Error: Unable to update product details";
             }
        
     }
@@ -130,10 +137,13 @@ class Products extends Database
 
         $delete= $model->deleteProduct($db,$data);
 
-            if ($add) {
-                return true;
+            if ($delete) {
+                $result['delete_product'] = true;
+                
+                return $result;
             } else {
-                return "Error: Unable to delete product";
+                $result['delete_product'] = false;
+                $result['error'] = "Error: Unable to delete product";
             }
        
     }

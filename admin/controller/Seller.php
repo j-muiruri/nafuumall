@@ -320,4 +320,25 @@ class Sellers
                 return "Unable to update Seller Payment Information, Error Occurred";
             }
     }
+
+    /**
+    * List All Users
+    */
+    public function allUsers()
+    {
+        $db = new Database;
+        $model = new UserModel;
+
+        return $model->getSellers($db, $fillable);
+    }
+    /**
+        * Get Single Seller Details
+        */
+    public function getUser($id)
+    {
+        $db = new Database;
+        $model = new UserModel;
+        ;
+        return $model->getSeller($db, $fillable, $tablekey, $id);
+    }
 }
