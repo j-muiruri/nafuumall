@@ -70,11 +70,12 @@ class ProductsModel
     {
         $pdo =  $db->getConn();
         
-        $sql = "INSERT INTO `product_details`(`seller_id`,`name`, `cat_name`, `sub_name`, `current_price`, `initial_price`, `short_description`, `long_description`, `image_1`, `image_2`, `image_3`, `date_posted`, `time_posted`, `type`, `discount`, `availability`, `warranty`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO `product_details`(seller_id,name,cat_name,sub_name,current_price,initial_price,short_description,long_description,image_1,image_2,image_3,type,discount,availability,warranty) VALUES (:seller_id,:name,:cat_name,:sub_name,:current_price,:initial_price,:short_description,:long_description,:image_1,:image_2,:image_3,:type,:discount,:availability,:warranty)";
         
         $result =$pdo->prepare($sql);
-        
+
         $result->execute($data);
+
         if ($result) {
             return true;
         } else {

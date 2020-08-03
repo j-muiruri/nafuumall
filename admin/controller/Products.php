@@ -49,7 +49,8 @@ class Products extends Database
      */
     public function createProduct()
     {
-        $data['name'] = $_POST['name'];
+        $data['seller_id'] = $_POST['seller_id'];
+        $data['name'] = $_POST['product_name'];
         $data['cat_name'] = $_POST['cat_name'];
         $data['sub_name'] = $_POST['sub_name'];
         $data['current_price'] = $_POST['current_price'];
@@ -59,13 +60,12 @@ class Products extends Database
         $data['image_1'] = $_POST['image_1'];
         $data['image_2'] = $_POST['image_2'];
         $data['image_3'] = $_POST['image_3'];
-        $data['date_posted'] = $_POST['date_posted'];
-        $data['time_posted'] = $_POST['time_posted'];
         $data['type'] = $_POST['type'];
         $data['discount'] = $_POST['discount'];
         $data['availability'] = $_POST['availability'];
         $data['warranty'] = $_POST['warranty'];
 
+      
 
         $db = new Database;
         $model = new ProductsModel;
@@ -75,11 +75,14 @@ class Products extends Database
             if ($add) {
 
                 $result['add_product'] = true;
-                
                 return $result;
             } else {
+
+
                 $result['add_product'] = false;
                 $result['error'] = "Error: Unable to add New Product";
+
+                return $result;
             }
        
     }
@@ -100,8 +103,6 @@ class Products extends Database
         $data['image_1'] = $_POST['image_1'];
         $data['image_2'] = $_POST['image_2'];
         $data['image_3'] = $_POST['image_3'];
-        $data['date_posted'] = $_POST['date_posted'];
-        $data['time_posted'] = $_POST['time_posted'];
         $data['type'] = $_POST['type'];
         $data['discount'] = $_POST['discount'];
         $data['availability'] = $_POST['availability'];
