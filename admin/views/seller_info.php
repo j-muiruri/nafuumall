@@ -1,3 +1,136 @@
+<?php
+/**
+ *Seller Registration Form
+ */
+
+//Include main Directory
+$dir= require_once"../config/config.php";
+
+//check user login
+if (isset($_SESSION['active'])) {
+    require_once $dir."admin/controller/Admin.php";
+
+    $admin = new Admin;
+
+    $id = $_SESSION['active'];
+
+    $userInfo = $admin->getAdmin($id);
+
+	/**
+	 * Register Seller Info
+	 */
+	if ($_POST['seller_add']) {
+        require_once $dir."admin/controller/Seller.php";
+
+        $sellers = new Sellers;
+        $msg1 = " ";
+
+        $add = $sellers->addSellers();
+
+        if ($add['reg_seller'] === true) {
+            // echo "Seller ID = ".$add['id'];
+
+			$_SESSION['seller_id_adm'] =$add['id'];
+            //  return var_dump($add);
+             
+            $error1 = "Seller Information Added!";
+            $msg1 = '<div class="alert alert-success alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">×</span>
+                                </button>
+                                <strong>'.$error.'</strong>
+                            </div>';
+        } else {
+            // return var_dump($add);
+            $error1 = $add['error'];
+            $msg1 = '<div class="alert alert-danger alert-dismissible " role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">×</span>
+                                </button>
+                                <strong>'.$error.'</strong>
+                            </div>';
+		}
+		
+	}
+
+	/**
+	 * Add Seller- Business Info
+	 */
+    if ($_POST['business_add']) {
+		require_once $dir."admin/controller/Seller.php";
+
+        $sellers = new Sellers;
+		$msg2 = " ";
+        $_POST['seller_id'] = $_SESSION['seller_id_adm'];
+        $add = $sellers->addBusiness();
+
+        if ($add['reg_business'] === true) {
+            // echo "Seller ID = ".$add['id'];
+
+			
+            //  return var_dump($add);
+             
+            $error2 = "Seller's Business Information Added!";
+            $msg2 = '<div class="alert alert-success alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">×</span>
+                                </button>
+                                <strong>'.$error2.'</strong>
+							</div>';
+        } else {
+            // return var_dump($add);
+            $error2 = $add['error'];
+            $msg2 = '<div class="alert alert-danger alert-dismissible " role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">×</span>
+                                </button>
+                                <strong>'.$error2.'</strong>
+                            </div>';
+		}
+	}
+	
+	/**
+	 * Add Seller- Payments Info
+	 */
+    if ($_POST['payment_add']) {
+		require_once $dir."admin/controller/Seller.php";
+
+        $sellers = new Sellers;
+		$msg3 = " ";
+        $_POST['seller_id'] = $_SESSION['seller_id_adm'];
+        $add = $sellers->addPayments();
+
+        if ($add['reg_payments'] === true) {
+            // echo "Seller ID = ".$add['id'];
+
+			
+            //  return var_dump($add);
+             
+            $error3 = "Seller's Payments Information Added!";
+            $msg3 = '<div class="alert alert-success alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">×</span>
+                                </button>
+                                <strong>'.$error3.'</strong>
+							</div>';
+
+                            unset($_SESSION['seller_id_adm']);
+        } else {
+            // return var_dump($add);
+            $error3 = $add['error'];
+            $msg3 = '<div class="alert alert-danger alert-dismissible " role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">×</span>
+                                </button>
+                                <strong>'.$error3.'</strong>
+                            </div>';
+		}
+    }
+} else {
+    header("Location: admin_login.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,7 +140,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Gentelella Alela! | </title>
+	<title>Nafuumall! | </title>
 
 	<!-- Bootstrap -->
 	<link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -38,7 +171,7 @@
 			<div class="col-md-3 left_col">
 				<div class="left_col scroll-view">
 					<div class="navbar nav_title" style="border: 0;">
-						<a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella Alela!</span></a>
+						<a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Nafuumall!</span></a>
 					</div>
 
 					<div class="clearfix"></div>
@@ -91,14 +224,7 @@
 						</div>
 
 						<div class="title_right">
-							<div class="col-md-5 col-sm-5  form-group pull-right top_search">
-								<div class="input-group">
-									<input type="text" class="form-control" placeholder="Search for...">
-									<span class="input-group-btn">
-										<button class="btn btn-default" type="button">Go!</button>
-									</span>
-								</div>
-							</div>
+							
 						</div>
 					</div>
 					<div class="clearfix"></div>
@@ -127,8 +253,8 @@
 								</div>
 								<div class="x_content">
 									<br />
-
-									<form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+									<?php echo $msg1; ?>
+									<form id="seller_form" data-parsley-validate class="form-horizontal form-label-left" method ="POST" >
 
 										<div class="item form-group">
 											<label class="col-form-label col-md-3 col-sm-3 label-align" for="full-name">Full Name <span class="required">*</span>
@@ -171,9 +297,9 @@
 
 
 										<div class="item form-group">
-											<label for="email" class="col-form-label col-md-3 col-sm-3 label-align">Email Address</label>
+											<label for="email_address" class="col-form-label col-md-3 col-sm-3 label-align">Email Address</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input id="email" class="form-control" type="text" name="email">
+												<input id="email_address" class="form-control" type="text" name="email_address">
 											</div>
 										</div>
 
@@ -201,7 +327,7 @@
 										<div class="item form-group">
 											<label for="e_contract" class="col-form-label col-md-3 col-sm-3 label-align">E-Contract</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input id="e_contract" class="flat" required="" value="Accepted" type="radio" name="contract">  I have read and accepted <a class="primary" href="#">Nafuumall Contract</a>
+												<input id="e_contract" class="flat" required="" value="1" type="radio" name="contract">  I have read and accepted <a class="primary" href="#">Nafuumall Contract</a>
 											</div>
 										</div>
 
@@ -235,10 +361,9 @@
 										<div class="ln_solid"></div>
 										<div class="item form-group">
 											<div class="col-md-6 col-sm-6 offset-md-3">
-											<input type="hidden"name="seller_add" value = "1">
-												<button class="btn btn-primary" type="button">Reset</button>
-												<button class="btn btn-primary" type="reset">Skip</button>
-												<button type="submit" class="btn btn-success"><a href="seller_info_summary.php">Next<a></button>
+											<input type="hidden" name="seller_add" value = "1">
+												<button class="btn btn-danger" type="reset">Reset</button>
+												<button type="submit" class="btn btn-success">Next</button>
 											</div>
 										</div>
 
@@ -259,8 +384,8 @@
 								</div>
 								<div class="x_content">
 									<br />
-
-									<form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+									<?php echo $msg2; ?>
+									<form id="business_form" data-parsley-validate method = "POST" class="form-horizontal form-label-left">
 
 										<div class="item form-group">
 											<label class="col-form-label col-md-3 col-sm-3 label-align" for="address_1">Address 1 <span class="required">*</span>
@@ -323,12 +448,12 @@
 										</div>
 
 										<div class="item form-group">
-											<label class="col-form-label col-md-3 col-sm-3 label-align" for="vat_status">VAT Registered<span class="required">*</span>
+											<label class="col-form-label col-md-3 col-sm-3 label-align" for="vat_registered">VAT Registered<span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<select id="vat_status" name="vat_status" required="required" class="form-control">
-													<option value="No">No</option>
-													<option value="Yes">Yes</option>
+												<select id="vat_registered" name="vat_registered" required="required" class="form-control">
+													<option value="0">No</option>
+													<option value="1">Yes</option>
 												</select>
 											</div>
 										</div>
@@ -355,8 +480,8 @@
 											<div class="col-md-6 col-sm-6 ">
 												<select id="main_category" name="category_id" required="required" class="form-control">
 													<option value="Choose Category">Choose Category</option>
-													<option value="Category 1">Category 1</option>
-													<option value="Category 2">Category 2</option>
+													<option value="1">Category 1</option>
+													<option value="2">Category 2</option>
 												</select>
 											</div>
 										</div>
@@ -365,7 +490,7 @@
 										<div class="item form-group">
 											<label for="legal_name" class="col-form-label col-md-3 col-sm-3 label-align">Legal Name / Company Name</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input id="legal_name" class="form-control" type="text" name="name2">
+												<input id="legal_name" class="form-control" type="text" name="name">
 											</div>
 										</div>
 
@@ -375,9 +500,8 @@
 										<div class="item form-group">
 											<div class="col-md-6 col-sm-6 offset-md-3">
 											<input type="hidden"name="business_add" value = "1">
-												<button class="btn btn-primary" type="button">Reset</button>
-												<button class="btn btn-primary" type="reset">Skip</button>
-												<button type="submit" class="btn btn-success"><a href="seller_info_summary.php">Next<a></button>
+												<button class="btn btn-danger" type="reset">Reset</button>
+												<button type="submit" class="btn btn-success">Next</button>
 											</div>
 										</div>
 
@@ -398,8 +522,8 @@
 								</div>
 								<div class="x_content">
 									<br />
-
-									<form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+									<?php echo $msg3; ?>
+									<form id="payments_form" method = "POST" data-parsley-validate class="form-horizontal form-label-left">
 
 										<div class="item form-group">
 											<label class="col-form-label col-md-3 col-sm-3 label-align" for="mpesa_name">MPESA Registered Name<span class="required">*</span>
@@ -494,9 +618,8 @@
 										<div class="item form-group">
 											<div class="col-md-6 col-sm-6 offset-md-3">
 											<input type="hidden"name="payment_add" value = "1">
-												<button class="btn btn-primary" type="button">Reset</button>
-												<button class="btn btn-primary" type="reset">Skip</button>
-												<button type="submit" class="btn btn-success"><a href="seller_info_summary.php">Next<a></button>
+												<button class="btn btn-primary" type="reset">Reset</button>
+												<button type="submit" class="btn btn-success">Next</button>
 											</div>
 										</div>
 
@@ -554,6 +677,10 @@
 	<script src="../vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
 	<!-- starrr -->
 	<script src="../vendors/starrr/dist/starrr.js"></script>
+	  <!-- PNotify -->
+	  <script src="../vendors/pnotify/dist/pnotify.js"></script>
+    <script src="../vendors/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="../vendors/pnotify/dist/pnotify.nonblock.js"></script>
 	<!-- Custom Theme Scripts -->
 	<script src="../build/js/custom.min.js"></script>
 

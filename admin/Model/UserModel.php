@@ -44,17 +44,15 @@ class UserModel
 
         $result =$pdo->prepare($sql);
 
-        print_r($data);
+        // print_r($data);
         $result->execute($data);
 
         // return true;
         if ($result) {
-            echo "added";
-            echo $pdo->lastInsertId();
-            return true;
+            $user['create']= true;
+            $user['id']=$pdo->lastInsertId();
+            return $user;
         } else {
-
-            echo "not added";
             return false;
         }
     }

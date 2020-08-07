@@ -1,14 +1,13 @@
 <?php
+
+require_once $dir.'admin/config/Db.php';
+require_once $dir.'admin/Model/UserModel.php';
+require_once $dir.'admin/Model/SellerInfoModel.php';
 /**
  * Sellers Controller Class
  *
  * @author John Muiruri <jontedev@gmail.com>
  */
-
-require_once '../config/Db.php';
-require_once 'admin/Model/UserModel.php';
-require_once 'admin/Model/SellerInfoModel.php';
-
 class Sellers
 {
     /**
@@ -16,72 +15,95 @@ class Sellers
      */
     public function addSellers()
     {
-            $data['name1'] = $_POST['name1'];
-            $data['email_address'] = $_POST['email_address'];
-            $data['phone'] = $_POST['phone'];
-            $data['referral'] = $_POST['referral'];
-            $data['national_id'] = $_POST['national_id'];
-            $data['gender'] = $_POST['gender'];
-            $data['dob'] = $_POST['dob'];
-            $data['display_name'] = $_POST['display_name'];
-            $data['contract'] = $_POST['contract'];
-            $options = [
+        $data['name'] = $_POST['name'];
+        $data['email_address'] = $_POST['email_address'];
+        $data['phone'] = $_POST['phone'];
+        $data['referral'] = $_POST['referral'];
+        $data['national_id'] = $_POST['national_id'];
+        $data['gender'] = $_POST['gender'];
+        $data['dob'] = $_POST['dob'];
+        $data['display_name'] = $_POST['display_name'];
+        $data['contract'] = $_POST['contract'];
+        $options = [
             'cost' => 11,
         ];
-            $data['password']  = password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
-            // $userType = $type;
+        $data['password']  = password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
+        // $userType = $type;
 
-            $db = new Database;
-            $model = new UserModel;
+        $db = new Database;
+        $model = new SellerInfoModel;
+        // return print_r($data);
+        //check if email exists
+        $column1 = "email_address";
+        $emailData['email_address'] = $data['email_address'];
+        $checkEmail = $model->checkSeller($db, $column1, $emailData);
 
-            $cols = "name,email_address,phone,referral,national_id,gender,dob,display_name,contract,password";
-        
-            $fillable = "sellers_info(".$cols.")";
+        //check if Display Name exists
+        $column2 = "display_name";
+        $dispData['display_name'] = $data['display_name'];
+        $checkDisplay = $model->checkSeller($db, $column2, $dispData);
 
-            //add opening and closing quotes on reg or data before insert
-            $add = $model->addUser($db, $fillable, $data);
-
-            if ($add) {
-                return true;
+        if (!$checkEmail && !$checkDisplay) {
+            $add = $model->addSeller($db, $data);
+            if ($add['create'] === true) {
+                $result['reg_seller'] =  true;
+                $result['id'] = $add['id'];
+    
+                return  $result;
             } else {
-                return "Unable to register Seller, Error Occurred: ".$add;
+                $result['reg_seller'] =  false;
+
+                $result['error'] = "Unable to register User, Error Occurred: ";
+    
+                return  $result;
             }
+        } elseif ($checkEmail) {
+            $result['reg_seller'] =  false;
+            $result['error'] = "Error Occurred: Email address already registered";
+    
+            return  $result;
+        } elseif ($checkDisplay) {
+            $result['reg_seller'] =  false;
+            $result['error'] = "Occurred: Business Name already registered";
+    
+            return  $result;
+        }
     }
     /**
     * edit Seller Info
     */
     public function editSellers($id)
     {
-            $data['name']= $_POST['name1'];
-            $data['email'] = $_POST['email_address'];
-            $data['phone']= $_POST['phone'];
-            $data['ref']= $_POST['referral'];
-            $data['national_id  ']= $_POST['national_id'];
-            $data['gender']= $_POST['gender'];
-            $data['dob']= $_POST['dob'];
-            $data['display_name']= $_POST['display_name'];
-            $data['contract']= $_POST['contract']; //Yes or no - true or false
-            $data['password'] = $_POST['password'];
-            $id = $_POST['seller_id'];
+        $data['name']= $_POST['name1'];
+        $data['email'] = $_POST['email_address'];
+        $data['phone']= $_POST['phone'];
+        $data['ref']= $_POST['referral'];
+        $data['national_id  ']= $_POST['national_id'];
+        $data['gender']= $_POST['gender'];
+        $data['dob']= $_POST['dob'];
+        $data['display_name']= $_POST['display_name'];
+        $data['contract']= $_POST['contract']; //Yes or no - true or false
+        $data['password'] = $_POST['password'];
+        $id = $_POST['seller_id'];
             
-            $data['9']  = password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
-            // $userType = $type;
+        $data['9']  = password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
+        // $userType = $type;
 
-            $db = new Database;
-            $model = new UserModel;
+        $db = new Database;
+        $model = new UserModel;
 
-            $cols = "name=:name,email_address=:email,phone=:phone,referral=:ref,national_id=:national_id,
+        $cols = "name=:name,email_address=:email,phone=:phone,referral=:ref,national_id=:national_id,
             gender=:gender,dob=:dob,display_name=:display_name,contract=:contract,password=:password'";
         
-            $fillable = "sellers_info";
-            $tablekey = "seller_id";
-            $update = $model->editUser($db, $id, $fillable, $cols, $data, $tablekey);
+        $fillable = "sellers_info";
+        $tablekey = "seller_id";
+        $update = $model->editUser($db, $id, $fillable, $cols, $data, $tablekey);
 
-            if ($update) {
-                return true;
-            } else {
-                return "Error Occurred:, Unable to update Seller ";
-            }
+        if ($update) {
+            return true;
+        } else {
+            return "Error Occurred:, Unable to update Seller ";
+        }
     }
     /**
      *Verify Seller
@@ -163,6 +185,65 @@ class Sellers
     }
 
     /**
+     * Temp Register Seller
+     * @return newuserid
+     */
+    public function tempReg($name, $email, $phone, $referral, $national_id, $gender, $dob, $display, $contract, $pass)
+    {
+        $data['name'] =  $name;
+        $data['email_address'] =  $email;
+        $data['phone'] =  $phone;
+        $data['referral'] =  $referral;
+        $data['national_id'] =  $national_id;
+        $data['gender'] =  $gender;
+        $data['dob'] =  $dob;
+        $data['display_name'] =  $display;
+        $data['contract'] =  $contract;
+        $options = [
+            'cost' => 11,
+        ];
+        $data['password']  = password_hash($pass, PASSWORD_BCRYPT, $options);
+
+        $db = new Database;
+        $model = new SellerInfoModel;
+        // return print_r($data);
+        //check if email exists
+        $column1 = "email_address";
+        $emailData['email_address'] = $data['email_address'];
+        $checkEmail = $model->checkSeller($db, $column1, $emailData);
+
+        //check if Display Name exists
+        $column2 = "display_name";
+        $dispData['display_name'] = $data['display_name'];
+        $checkDisplay = $model->checkSeller($db, $column2, $dispData);
+
+        if (!$checkEmail && !$checkDisplay) {
+            $add = $model->addSeller($db, $data);
+            if ($add['create'] === true) {
+                $result['reg'] =  true;
+                $result['id'] = $add['id'];
+    
+                return  $result;
+            } else {
+                $result['reg'] =  false;
+
+                $result['error'] = "Unable to register User, Error Occurred: ";
+    
+                return  $result;
+            }
+        } elseif ($checkEmail) {
+            $result['reg'] =  false;
+            $result['error'] = "Error Occurred: Email address already registered";
+    
+            return  $result;
+        } elseif ($checkDisplay) {
+            $result['reg'] =  false;
+            $result['error'] = "Occurred: Business Name already registered";
+    
+            return  $result;
+        }
+    }
+    /**
      * End of Seller Section
      */
 
@@ -177,70 +258,73 @@ class Sellers
     */
     public function addBusiness()
     {
-            $data['registration_no']= $_POST['registration_no'];
-            $data['business_type']= $_POST['business_type'];
-            $data['seller_vat']= $_POST['seller_vat'];
-            $data['category_id']= $_POST['category_id'];
-            $data['name2']= $_POST['name2'];
-            $data['person_incharge']= $_POST['person_incharge'];
-            $data['person_gender']= $_POST['person_gender'];
-            $data['address']= $_POST['address'];
-            $data['postal_code']= $_POST['postal_code'];
-            $data['town']= $_POST['town'];
-            $data['vat_registered']= $_POST['vat_registered'];
+        $data['seller_id']= $_POST['seller_id'];
+        $data['registration_no']= $_POST['registration_no'];
+        $data['business_type']= $_POST['business_type'];
+        $data['seller_vat']= $_POST['seller_vat'];
+        $data['category_id']= $_POST['category_id'];
+        $data['name']= $_POST['name'];
+        $data['person_incharge']= $_POST['person_incharge'];
+        $data['person_gender']= $_POST['person_gender'];
+        $data['address']= $_POST['address'];
+        $data['postal_code']= $_POST['postal_code'];
+        $data['town']= $_POST['town'];
+        $data['vat_registered']= $_POST['vat_registered'];
 
 
-            $db = new Database;
-            $model = new SellerInfoModel;
+        $db = new Database;
+        $model = new SellerInfoModel;
 
-            $cols = "registration_no,business_type,seller_vat,category_id,name,person_incharge,person_gender,
-            address,postal_code,town,vat_registered";
-        
-            $fillable = "sellers_business_info(".$cols.")";
+        $add = $model->addBusiness($db, $data);
 
-            $add = $model->addBusiness($db, $fillable, $data);
+        if ($add['create'] === true) {
+            $result['reg_business'] =  true;
+            $result['id'] = $add['id'];
 
-            if ($add) {
-                return true;
-            } else {
-                return "Unable to register Seller Business Information, Error Occurred";
-            }
+            return  $result;
+        } else {
+            $result['reg_business'] =  false;
+
+            $result['error'] = "Unable to register Business, Error Occurred: ";
+
+            return  $result;
+        }
     }
     /**
     * edit BusinessInfo
     */
     public function editBusiness($id)
     {
-            $data['registration_no']= $_POST['registration_no'];
-            $data['business_type']= $_POST['business_type'];
-            $data['seller_vat']= $_POST['seller_vat'];
-            $data['category_id']= $_POST['category_id'];
-            $data['name2']= $_POST['name2'];
-            $data['person_incharge']= $_POST['person_incharge'];
-            $data['person_gender']= $_POST['person_gender'];
-            $data['address']= $_POST['address'];
-            $data['postal_code']= $_POST['postal_code'];
-            $data['town']= $_POST['town'];
-            $data['vat_registered']= $_POST['vat_registered'];
-            $id = $_POST['business_id'];
+        $data['registration_no']= $_POST['registration_no'];
+        $data['business_type']= $_POST['business_type'];
+        $data['seller_vat']= $_POST['seller_vat'];
+        $data['category_id']= $_POST['category_id'];
+        $data['name2']= $_POST['name2'];
+        $data['person_incharge']= $_POST['person_incharge'];
+        $data['person_gender']= $_POST['person_gender'];
+        $data['address']= $_POST['address'];
+        $data['postal_code']= $_POST['postal_code'];
+        $data['town']= $_POST['town'];
+        $data['vat_registered']= $_POST['vat_registered'];
+        $id = $_POST['business_id'];
 
-            $db = new Database;
-            $model = new SellerInfoModel;
+        $db = new Database;
+        $model = new SellerInfoModel;
 
-            $cols = "registration_no=:registration_no,business_type=:business_type,seller_vat=:seller_vat,
+        $cols = "registration_no=:registration_no,business_type=:business_type,seller_vat=:seller_vat,
             category_id=:category_id,name=:name2,person_incharge=:person_incharge,
             person_gender=:person_gender,address=:address,
             postal_code=:postal_code,town=:town,vat_registered=:vat_registered,";
         
-            $fillable = "sellers_business_info";
-            $key = "business_id";
-            $update = $model->editBusiness($db, $id, $fillable, $data, $key);
+        $fillable = "sellers_business_info";
+        $key = "business_id";
+        $update = $model->editBusiness($db, $id, $fillable, $data, $key);
 
-            if ($update) {
-                return true;
-            } else {
-                return "Unable to update Seller Business Information, Error Occurred";
-            }
+        if ($update) {
+            return true;
+        } else {
+            return "Unable to update Seller Business Information, Error Occurred";
+        }
     }
     /**
      * End of Business Section
@@ -258,71 +342,73 @@ class Sellers
      */
     public function addPayments()
     {
-            $data['mpesa_name'] = $_POST['mpesa_name'];
-            $data['mpesa_phone'] = $_POST['mpesa_phone'];
-            $data['bank_acc_name'] = $_POST['bank_acc_name'];
-            $data['bank_acc_no'] = $_POST['bank_acc_no'];
-            $data['bank_name'] = $_POST['bank_name'];
-            $data['bank_code'] = $_POST['bank_code'];
-            $data['bank_branch'] = $_POST['bank_branch'];
-            $data['iban'] = $_POST['iban'];
-            $data['swift'] = $_POST['swift'];
-            $data['payment_mode'] = $_POST['payment_mode'];
+        $data['mpesa_name'] = $_POST['mpesa_name'];
+        $data['seller_id'] = $_POST['seller_id'];
+        $data['mpesa_phone'] = $_POST['mpesa_phone'];
+        $data['bank_acc_name'] = $_POST['bank_acc_name'];
+        $data['bank_acc_no'] = $_POST['bank_acc_no'];
+        $data['bank_name'] = $_POST['bank_name'];
+        $data['bank_code'] = $_POST['bank_code'];
+        $data['bank_branch'] = $_POST['bank_branch'];
+        $data['iban'] = $_POST['iban'];
+        $data['swift'] = $_POST['swift'];
+        $data['payment_mode'] = $_POST['payment_mode'];
 
 
-            $db = new Database;
-            $model = new SellerInfoModel;
+        $db = new Database;
+        $model = new SellerInfoModel;
 
-            $cols = "mpesa_name,mpesa_phone,bank_acc_name,bank_acc_no,bank_name,
-            bank_code,bank_branch,iban,swift,payment_mode";
-        
-            $fillable = "sellers_payments_info(".$cols.")";
+        $add = $model->addPayment($db,$data);
 
-            //add opening and closing quotes on reg or data before insert
-            $add = $model->addPayment($db, $fillable,$data);
+        if ($add['create'] === true) {
+            $result['reg_payments'] =  true;
+            $result['id'] = $add['id'];
 
-            if ($add === true) {
-                return true;
-            } else {
-                return "Unable to register Seller Payment Information, Error Occurred: ".$add;
-            }
+            return  $result;
+        } else {
+            $result['reg_payments'] =  false;
+
+            $result['error'] = "Unable to add Payments, Error Occurred: ";
+
+            return  $result;
+        }
     }
     /**
     * edit Payments Info
     */
     public function editPayments($id)
     {
-            $data['mpesa_name'] = $_POST['mpesa_name'];
-            $data['mpesa_phone ']= $_POST['mpesa_phone'];
-            $data['bank_acc_name']= $_POST['bank_acc_name'];
-            $data['bank_acc_no'] = $_POST['bank_acc_no'];
-            $data['bank_name'] = $_POST['bank_name'];
-            $data['bank_code ']= $_POST['bank_code'];
-            $data['bank_branch ']= $_POST['bank_branch'];
-            $data['iban'] = $_POST['iban'];
-            $data['swift ']= $_POST['swift'];
-            $data['payment_mode'] = $_POST['payment_mode'];
+        $data['mpesa_name'] = $_POST['mpesa_name'];
+        $data['mpesa_phone ']= $_POST['mpesa_phone'];
+        $data['bank_acc_name']= $_POST['bank_acc_name'];
+        $data['bank_acc_no'] = $_POST['bank_acc_no'];
+        $data['bank_name'] = $_POST['bank_name'];
+        $data['bank_code ']= $_POST['bank_code'];
+        $data['bank_branch ']= $_POST['bank_branch'];
+        $data['iban'] = $_POST['iban'];
+        $data['swift ']= $_POST['swift'];
+        $data['payment_mode'] = $_POST['payment_mode'];
 
-            $db = new Database;
-            $model = new SellerInfoModel;
+        $db = new Database;
+        $model = new SellerInfoModel;
 
-            $cols= "mpesa_name=:mpesa_name,mpesa_phone=:mpesa_phone,bank_acc_name=:bank_acc_name,bank_acc_no=:bank_acc_no,
+        $cols= "mpesa_name=:mpesa_name,mpesa_phone=:mpesa_phone,bank_acc_name=:bank_acc_name,bank_acc_no=:bank_acc_no,
             bank_name=:bank_name,bank_code=:bank_code,bank_branch=:bank_branch,
             iban=:iban,swift=:swift,payment_mode=:payment_mode'";
         
-            $fillable = "sellers_payments_info";
-            $key = "payments_id";
-            $update = $model->editPayment($db, $id, $fillable, $cols, $data, $key);
+        $fillable = "sellers_payments_info";
+        $key = "payments_id";
+        $update = $model->editPayment($db, $id, $fillable, $cols, $data, $key);
 
-            if ($update) {
-                return true;
-            } else {
-                return "Unable to update Seller Payment Information, Error Occurred";
-            }
+        if ($update) {
+            return true;
+        } else {
+            return "Unable to update Seller Payment Information, Error Occurred";
+        }
     }
 
     /**
-    * List All Users
+    * List All Sellers
     */
     public function allUsers()
     {

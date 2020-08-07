@@ -10,7 +10,7 @@
                   <li><a><i class="fa fa-edit"></i>Users<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="table_admins.php">Admins</a></li>
-                      <li><a href="table_sellers.php">Sellers</a></li>
+                      <li><a href="seller_info.php">Register Sellers</a></li>
                       <li><a href="table_customers.php">Customers</a></li>
                     </ul>
                   </li>

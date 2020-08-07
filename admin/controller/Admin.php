@@ -40,10 +40,15 @@ class Admin
         //add opening and closing quotes on reg or data
         $add = $model->addUser($db, $fillable, $data);
 
-        if ($add) {
-            return true;
+        if ($add['create'] === true) {
+            $result['reg'] =  true;
+
+            return  $result;
         } else {
-            return "Unable to register User, Error Occurred: ".$add;
+           
+            $result['error'] = "Unable to register User, Error Occurred: ";
+
+            return  $result;
         }
     }
 
@@ -186,10 +191,17 @@ class Admin
 
         $add = $model->addUser($db, $fillable, $data);
 
-        if ($add) {
-            return true;
+        if ($add['create'] === true) {
+
+            $result['reg'] =  true;
+            $result['id'] = $add['id'];
+
+            return  $result;
         } else {
-            return "Unable to register User, Error Occurred ";
+           
+            $result['error'] = "Unable to register User, Error Occurred: ";
+
+            return  $result;
         }
     }
 

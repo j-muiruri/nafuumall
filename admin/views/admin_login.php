@@ -6,23 +6,26 @@
 $dir = require_once"../config/config.php";
 
 if (isset($_SESSION['active'])) {
-
     header("Location: admin.php");
-}
-else {
-
+} else {
     require_once $dir."admin/controller/Admin.php";
 
     $admin = new Admin;
-    $msg = "";
+    $msg = " ";
 
-    if ($_POST['login']) {
+    if (isset($_POST['login'])) {
         $login = $admin ->adminLogin();
         if ($login['login'] === true) {
             # code...
             $_SESSION['active'] = $login['id'];
 
-            header("Location: admin.php");
+            if (isset($_SERVER['HTTP_REFERER'])) {
+
+                $ref =$_SERVER['HTTP_REFERER'];
+                header("Location: $ref");
+            } else {
+                header("Location: admin.php");
+            }
         } else {
             $error = $login['error'];
             $msg = '<div class="alert alert-danger alert-dismissible " role="alert">
