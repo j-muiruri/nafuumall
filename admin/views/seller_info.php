@@ -16,6 +16,7 @@ if (isset($_SESSION['active'])) {
 
     $userInfo = $admin->getAdmin($id);
 
+    file_get_contents();
 	/**
 	 * Register Seller Info
 	 */

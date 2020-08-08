@@ -61,9 +61,12 @@ class Category extends Database
         $add = $model->addCategory($db, $data);
 
         if ($add) {
-            return true;
+            $result['add_cat'] = true;
+            return $result;
         } else {
-            return "Error: Unable to add New Category";
+            $result['error']  = "Error: Unable to add New Category";
+            $result['add_cat'] = false;
+            return $result;
         }
 
     }
@@ -141,7 +144,8 @@ class Category extends Database
      */
     public function createSub()
     {
-        $data['cat_name'] = $_POST['cat_name'];
+        $data['cat_id'] = $_POST['cat_id'];
+        $data['sub_name'] = $_POST['sub_name'];
 
         $db    = new Database;
         $model = new CategoryModel;
@@ -149,9 +153,12 @@ class Category extends Database
         $add = $model->addSub($db, $data);
 
         if ($add) {
-            return true;
+            $result['add_sub'] = true;
+            return $result;
         } else {
-            return "Error: Unable to add New Category";
+            $result['error']  = "Error: Unable to add New SubCategory";
+            $result['add_sub'] = false;
+            return $result;
         }
 
     }
@@ -161,8 +168,9 @@ class Category extends Database
      */
     public function updateSub()
     {
+        $data['sub_id']   = $_POST['sub_id'];
+        $data['sub_name'] = $_POST['sub_name'];
         $data['cat_id']   = $_POST['cat_id'];
-        $data['cat_name'] = $_POST['cat_name'];
 
         $db    = new Database;
         $model = new CategoryModel;
@@ -172,7 +180,7 @@ class Category extends Database
         if ($add) {
             return true;
         } else {
-            return "Error: Unable to Update Category Details";
+            return "Error: Unable to Update SubCategory Details";
         }
 
     }
@@ -181,7 +189,7 @@ class Category extends Database
      */
     public function deleteSub()
     {
-        $data['cat_id'] = $_POST['cat_id'];
+        $data['sub_id'] = $_POST['sub_id'];
 
         $db    = new Database;
         $model = new CategoryModel;
@@ -191,7 +199,7 @@ class Category extends Database
         if ($add) {
             return true;
         } else {
-            return "Error: Unable to delete Category";
+            return "Error: Unable to delete SubCategory";
         }
 
     }

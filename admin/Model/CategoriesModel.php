@@ -64,10 +64,10 @@ class CategoryModel
     {
         $pdo = $db->getConn();
         
-        $sql = "INSERT INTO `category`(`cat_name`) VALUES (?)";
+        $sql = "INSERT INTO `category`(`cat_name`) VALUES (:cat_name)";
         
         $result =$pdo->prepare($sql);
-        
+        // print_r($data);
         $result->execute($data);
 
         if ($result) {
@@ -168,7 +168,7 @@ class CategoryModel
     {
         $pdo =  $db->getConn();
         
-        $sql = "INSERT INTO `sub_category`(`sub_name`,`cat_id`)  VALUES (?,?)";
+        $sql = "INSERT INTO `sub_category`(`sub_name`,`cat_id`)  VALUES (:sub_name,:cat_id)";
         
         $result =$pdo->prepare($sql);
         

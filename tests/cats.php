@@ -7,7 +7,7 @@ require_once $dir."admin/controller/Category.php";
 
 $cat = new Category;
 
-$result = $cat->AllSubs();
+$result = $cat->AllCategories();
 // $id['product_id'] = 5;
 // $result = $product->singleProducts($id);
 
