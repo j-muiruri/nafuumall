@@ -4,7 +4,7 @@
                 <ul class="nav side-menu">
                   <li><a ><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="../admin.php">Dashboard</a></li>
+                      <li><a href="admin.php">Dashboard</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-edit"></i>Users<span class="fa fa-chevron-down"></span></a>
@@ -17,7 +17,7 @@
                   <li><a><i class="fa fa-desktop"></i>Categories<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="categories/category_add.php">Add Categories</a></li>
-                      <li><a href="categories/sub_category_add.php">Add Sub categories</a></li>
+                      <li><a href="categories/subcategory_add.php">Add Sub categories</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-table"></i> Products <span class="fa fa-chevron-down"></span></a>
