@@ -101,6 +101,31 @@ class User extends Database
     }
 
 
+/**
+     * Delete Seller
+     */
+    public function deleteSeller($id)
+    {
+        $data['seller_id'] = $id;
+
+        $db    = new Database;
+        $model = new UserModel;
+        $fillable = "seller_info";
+        $delete = $model->deleteUser($db, $fillable, $data);
+
+        if ($delete) {
+            $result['delete_seller'] = true;
+            return $result;
+        } else {
+            $result['error']  = "Error: Unable to Delete Seller";
+            $result['delete_seller'] = false;
+            return $result;
+        }
+
+    }
+
+
+
     /***
      * Register user
      */

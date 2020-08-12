@@ -41,12 +41,13 @@ class Admin
         $add = $model->addUser($db, $fillable, $data);
 
         if ($add['create'] === true) {
-            $result['reg'] =  true;
-
+            $result['admin_reg'] =  true;
+            $result['id'] = $add['id'];
             return  $result;
         } else {
-           
-            $result['error'] = "Unable to register User, Error Occurred: ";
+
+            $result['admin_reg'] =  true;
+            $result['error'] = "Unable to register User, Error Occurred ";
 
             return  $result;
         }
@@ -167,6 +168,31 @@ class Admin
         $tablekey = "id=:id";
         return $model->getUser($db, $fillable, $tablekey, $data);
     }
+
+/**
+     * Delete Admin
+     */
+    public function deleteAdmin($id)
+    {
+        $data['id'] = $id;
+
+        $db    = new Database;
+        $model = new UserModel;
+        $fillable = "admin_users";
+        $delete = $model->deleteUser($db, $fillable, $data);
+
+        if ($delete) {
+            $result['delete_admin'] = true;
+            return $result;
+        } else {
+            $result['error']  = "Error: Unable to Delete Category";
+            $result['delete_admin'] = false;
+            return $result;
+        }
+
+    }
+
+
 
     /***
      * Temporaray Register admin

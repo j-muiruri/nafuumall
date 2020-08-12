@@ -79,20 +79,21 @@ class UserModel
 
 
     /**
-    * Delete User
-    */
-    public function deleteUser($db, $fillable, $id)
+     * Delete User
+     *
+     */
+    public function deleteUser($db, $table, $id)
     {
-        $conn =  $db->getConn();
+        $pdo =  $db->getConn();
+        
+        $sql = "DELETE FROM $table WHERE id =:id";
+        
+        $result =$pdo->prepare($sql)->execute($id);
 
-        $sql = "DELETE FROM $fillable WHERE id = $id";
-
-        $result = $conn->query($sql);
-
-        if ($result === true) {
+        if ($result) {
             return true;
         } else {
-            return $conn->error;
+            return false;
         }
     }
 

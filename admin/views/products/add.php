@@ -20,6 +20,15 @@ if (isset($_SESSION['active'])) {
     $userInfo = $admin->getAdmin($id);
 
 
+    require_once $dir."admin/controller/Category.php";
+    require_once $dir."admin/controller/Seller.php";
+    require_once $dir."admin/controller/User.php";
+
+
+    $cat = new Category;
+    $seller= new User;
+    $category= $cat->AllCategories();
+    $subcategory = $cat->allSubs();
 
     if ($_POST['add']) {
         require_once $dir."admin/controller/Products.php";
@@ -154,23 +163,7 @@ if (isset($_SESSION['active'])) {
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h2>Add Products <small>Fill all required fields</small></h2>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                        </li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                                aria-haspopup="true" aria-expanded="false"><i
-                                                    class="fa fa-wrench"></i></a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a class="dropdown-item" href="#">Settings 1</a>
-                                                </li>
-                                                <li><a class="dropdown-item" href="#">Settings 2</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                        </li>
-                                    </ul>
+                                    
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="col-md-12 col-sm-12">
@@ -187,10 +180,20 @@ if (isset($_SESSION['active'])) {
                                                     </label>
                                                     <div class="col-md-6 col-sm-6 ">
                                                         <select class="form-control" name="seller_id" required>
-                                                            <option value="" selected>Choose Seller
+                                                            <option value="" selected>Choose Seller - Display Name
                                                             </option>
-                                                            <option value="1" >Option one
+                                                            <?php
+
+                                                            $sellerList =  $seller->listUsers();
+                                                            foreach($sellerList as $row):
+
+
+                                                            ?>
+                                                            <option value="<?php echo $row['seller_id']; ?>" ><?php echo $row['name']; ?> - <?php echo $row['display_name']; ?>
                                                             </option>
+                                                            <?php
+                                                            endforeach;
+                                                            ?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -262,8 +265,14 @@ if (isset($_SESSION['active'])) {
                                                         <select class="form-control"   name="cat_name" required>
                                                             <option value="" selected>Choose
                                                                 Category</option>
-                                                            <option value="1" >Option one
+                                                                <?php
+                                                            $catList = $cat->AllCategories();
+                                                            // var_dump($catList);
+                                                            foreach($catList as $row):
+                                                            ?>
+                                                            <option value="<?php echo $row['cat_name']; ?>" ><?php echo $row['cat_name']; ?>
                                                             </option>
+                                                            <?php endforeach;?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -275,8 +284,14 @@ if (isset($_SESSION['active'])) {
                                                         <select class="form-control" name="sub_name" required>
                                                             <option value=""  selected>
                                                                 Choose Sub Category</option>
-                                                            <option value="5" >Option one
+                                                                <?php
+                                                            $catList = $cat->allSubs();
+                                                            // var_dump($catList);
+                                                            foreach($catList as $row):
+                                                            ?>
+                                                            <option value="<?php echo $row['sub_name']; ?>" ><?php echo $row['sub_name']; ?>
                                                             </option>
+                                                            <?php endforeach;?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -288,8 +303,8 @@ if (isset($_SESSION['active'])) {
                                                         <select class="form-control" name="type" required>
                                                             <option value=""  selected>Choose Type
                                                             </option>
-                                                            <option value="2" >Option one</option>
-                                                            <option value="6" >Option two</option>
+                                                            <option value="Featured" >Featured</option>
+                                                            <option value="Normal" >Normal</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -301,7 +316,9 @@ if (isset($_SESSION['active'])) {
                                                         <select class="form-control" name="availability" required>
                                                             <option value=""  selected>
                                                                 Choose Availability</option>
-                                                            <option value="5" >Option one
+                                                            <option value="Locally" >Locally
+                                                            </option>
+                                                            <option value="Overseas" >Overseas
                                                             </option>
                                                         </select>
                                                     </div>
@@ -314,13 +331,13 @@ if (isset($_SESSION['active'])) {
                                                         <select class="form-control" name="warranty" required>
                                                             <option value=""  selected>Choose
                                                             Warranty</option>
-                                                            <option value="1" >Option one
+                                                            <option value="1 Year Warranty" >1 Year
                                                             </option>
-                                                            <option value="2" >Option two
+                                                            <option value="2 Year Warranty" >2 Years
                                                             </option>
-                                                            <option value="0" >Option three
+                                                            <option value="3 Year Warranty" >3 Years
                                                             </option>
-                                                            <option value="5" >Option four
+                                                            <option value="4 Year Warranty" >4 Years
                                                             </option>
                                                         </select>
                                                     </div>
@@ -360,8 +377,8 @@ if (isset($_SESSION['active'])) {
                                                 <div class="ln_solid"></div>
                                                 <div class="item form-group">
                                                     <div class="col-md-6 col-sm-6 offset-md-3">
-                                                        <button class="btn btn-danger" type="reset">Reset</button>
-                                                        <button type="submit" class="btn btn-success">Submit</button>
+                                                        <button class="btn btn-sm  btn-danger" type="reset">Reset</button>
+                                                        <button type="submit" class="btn btn-sm btn-success">Submit</button>
                                                     </div>
                                                 </div>
                                     </form>

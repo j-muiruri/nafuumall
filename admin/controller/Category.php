@@ -84,29 +84,35 @@ class Category extends Database
 
         $edit = $model->updateCategory($db, $data);
 
-        if ($add) {
-            return true;
+        if ($edit) {
+            $result['edit_cat'] = true;
+            return $result;
         } else {
-            return "Error: Unable to Update Category Details";
+            $result['error']  = "Error: Unable to Update Category";
+            $result['edit_cat'] = false;
+            return $result;
         }
 
     }
     /**
      * Delete Category
      */
-    public function deleteCategory()
+    public function deleteCategory($id)
     {
-        $data['cat_id'] = $_POST['cat_id'];
+        $data['cat_id'] = $id;
 
         $db    = new Database;
         $model = new CategoryModel;
 
         $delete = $model->deleteCategory($db, $data);
 
-        if ($add) {
-            return true;
+        if ($delete) {
+            $result['delete_cat'] = true;
+            return $result;
         } else {
-            return "Error: Unable to delete Category";
+            $result['error']  = "Error: Unable to Delete Category";
+            $result['delete_cat'] = false;
+            return $result;
         }
 
     }
@@ -177,10 +183,13 @@ class Category extends Database
 
         $edit = $model->updateSub($db, $data);
 
-        if ($add) {
-            return true;
+        if ($edit) {
+            $result['edit_cat'] = true;
+            return $result;
         } else {
-            return "Error: Unable to Update SubCategory Details";
+            $result['error']  = "Error: Unable to Update Category";
+            $result['edit_cat'] = false;
+            return $result;
         }
 
     }
@@ -196,10 +205,13 @@ class Category extends Database
 
         $delete = $model->deleteSub($db, $data);
 
-        if ($add) {
-            return true;
+        if ($delete) {
+            $result['delete_cat'] = true;
+            return $result;
         } else {
-            return "Error: Unable to delete SubCategory";
+            $result['error']  = "Error: Unable to Delete Category";
+            $result['delete_cat'] = false;
+            return $result;
         }
 
     }

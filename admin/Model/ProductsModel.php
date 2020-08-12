@@ -108,9 +108,9 @@ class ProductsModel
     {
         $pdo =  $db->getConn();
         
-        $sql = "DELETE FROM `product_details` WHERE id =:product_id";
+        $sql = "DELETE FROM `product_details` WHERE product_id =:product_id";
         
-        $result =$pdo->prepare($sql)->execute($id);
+        $result =$pdo->prepare($sql)->execute($data);
 
         if ($result) {
             return true;

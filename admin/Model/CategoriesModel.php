@@ -107,6 +107,7 @@ class CategoryModel
         $result =$pdo->prepare($sql)->execute($id);
 
         if ($result) {
+           
             return true;
         } else {
             return false;

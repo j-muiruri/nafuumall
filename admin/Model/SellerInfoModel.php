@@ -129,6 +129,24 @@ class SellerInfoModel
     }
 
 
+     /**
+     * Delete User
+     *
+     */
+    public function deleteUser($db, $table, $id)
+    {
+        $pdo =  $db->getConn();
+        
+        $sql = "DELETE FROM sellers_info WHERE seller_id =:seller_id";
+        
+        $result =$pdo->prepare($sql)->execute($id);
+
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     /***********************************
      * Payments Info Section
      */

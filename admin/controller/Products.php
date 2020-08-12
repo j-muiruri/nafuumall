@@ -128,9 +128,9 @@ class Products extends Database
      /**
      * Delete Product
      */
-    public function deleteProduct()
+    public function deleteProduct($id)
     {
-        $data['product_id'] = $_POST['product_id'];
+        $data['product_id'] = $id;
 
 
         $db = new Database;

@@ -184,7 +184,7 @@ if (isset($_SESSION['active'])) {
                                                             </option>
                                                             <?php
                                                             $catList = $subs->AllCategories();
-                                                            var_dump($catList);
+                                                            // var_dump($catList);
                                                             foreach($catList as $row):
                                                             ?>
                                                             <option value="<?php echo $row['cat_id']; ?>" ><?php echo $row['cat_name']; ?>
