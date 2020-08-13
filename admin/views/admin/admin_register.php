@@ -52,7 +52,7 @@ if (isset($_SESSION['active'])) {
     }
 
 } else {
-    header("Location: admin_login.php");
+    header("Location: ../admin_login.php");
 }
 ?>
 
@@ -232,7 +232,7 @@ if (isset($_SESSION['active'])) {
 
             <!-- footer content -->
             <?php
-  include_once 'footer.php';
+  include_once '../footer.php';
 ?>
             <!-- /footer content -->
         </div>

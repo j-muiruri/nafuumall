@@ -17,8 +17,8 @@ class Admin
     public $data = array();
 
 
-    /***
-     * Register user
+    /**
+     * Register Admin
      */
     public function adminReg()
     {
@@ -35,7 +35,7 @@ class Admin
 
         $cols = "name,email,phone,password";
         
-        $fillable = "client_users(".$cols.")";
+        $fillable = "admin_users(".$cols.")";
 
         //add opening and closing quotes on reg or data
         $add = $model->addUser($db, $fillable, $data);
@@ -46,7 +46,7 @@ class Admin
             return  $result;
         } else {
 
-            $result['admin_reg'] =  true;
+            $result['admin_reg'] =  false;
             $result['error'] = "Unable to register User, Error Occurred ";
 
             return  $result;
